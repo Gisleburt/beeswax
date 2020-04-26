@@ -6,6 +6,7 @@ use std::error::Error;
 
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
+/// Creates the BeeswaxApi client. This type is instantiated from the BeeswaxApi struct.
 pub struct BeeswaxApiBuilder {
     base_url: String,
 }
@@ -22,16 +23,19 @@ impl BeeswaxApiBuilder {
     }
 }
 
+/// Provides an interface to the Beeswax Api
 pub struct BeeswaxApi {
     base_url: String,
     client: Client,
 }
 
 impl BeeswaxApi {
+    /// Creates the API builder
     pub fn builder(base_url: String) -> BeeswaxApiBuilder {
         BeeswaxApiBuilder { base_url }
     }
 
+    /// Find objects of a given resource
     pub async fn find<R: Resource, S: SearchCriteria<R>>(&self, criteria: &S) -> Result<Vec<R>> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.get(&url).query(criteria).build()?;

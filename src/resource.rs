@@ -1,5 +1,7 @@
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
+//! A collection of resources to use with the api
+
 mod advertiser;
 mod authenticate;
 mod creative;

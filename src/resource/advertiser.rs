@@ -7,6 +7,7 @@ use serde_json::Value as JsonValue;
 /// Creatives.
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Advertiser {
+    /// Unique ID of the advertiser
     pub advertiser_id: u64,
     /// Unique name for the advertiser, must be unique per account.
     pub advertiser_name: String,

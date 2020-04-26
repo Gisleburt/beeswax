@@ -23,6 +23,7 @@ impl Default for CreativeType {
 /// Assets, Templates, Rules.
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Creative {
+    /// Unique ID of the Creative
     pub creative_id: u64,
 
     /// Must belong to the same account as the Advertiser and be active
@@ -133,6 +134,7 @@ impl Resource for Creative {
 pub struct CreativeSearchCriteria {
     /// Unique ID of the Creative
     pub creative_id: Option<u64>,
+    /// Must belong to the same account as the Advertiser
     pub advertiser_id: Option<u64>,
     /// Name of the Creative, e.g. "Blue Banner Ad"
     pub creative_name: Option<String>,
@@ -150,6 +152,7 @@ pub struct CreativeSearchCriteria {
 
 impl SearchCriteria<Creative> for CreativeSearchCriteria {}
 
+/// Create a search criteria for creatives for the given advertiser
 impl From<Advertiser> for CreativeSearchCriteria {
     fn from(adveritiser: Advertiser) -> Self {
         CreativeSearchCriteria {
