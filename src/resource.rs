@@ -2,9 +2,11 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 mod advertiser;
 mod authenticate;
+mod creative;
 
 pub use advertiser::*;
 pub use authenticate::*;
+pub use creative::*;
 
 pub trait Resource: Serialize + DeserializeOwned {
     const NAME: &'static str;
