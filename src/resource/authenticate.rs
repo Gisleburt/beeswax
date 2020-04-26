@@ -17,7 +17,6 @@ pub struct Authenticate {
 
 impl Resource for Authenticate {
     const NAME: &'static str = "authenticate";
-    const ID_FIELD: &'static str = "email";
 }
 
 impl Authenticate {

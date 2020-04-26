@@ -1,23 +1,5 @@
-use crate::resource::{Create, Delete, Resource, Search};
+use crate::resource::{Create, Delete, FrequencyCap, Resource, RevenueType, Search};
 use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-struct FrequencyCap {
-    /// Duration of time in which to cap impressions, in seconds. 30-day (2592000) max.
-    duration: Option<u64>,
-
-    /// Number of impressions to allow within the duration set
-    impressions: Option<u64>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-enum RevenueType {
-    CPM,
-    CPC,
-    CPCV,
-    CPI,
-    CPA,
-}
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 struct Campaign {
@@ -110,27 +92,26 @@ struct Campaign {
 
 impl Resource for Campaign {
     const NAME: &'static str = "resource";
-    const ID_FIELD: &'static str = "resource_id";
 }
 
 #[derive(Clone, Debug, Default, Serialize)]
 pub struct SearchCampaign {
     /// Unique ID of the campaign
-    campaign_id: u64,
+    campaign_id: Option<u64>,
     /// Id of the Advertiser the campaign belongs too
-    advertiser_id: u64,
+    advertiser_id: Option<u64>,
     /// Name of the campaign, e.g. "Winter lead generation"
-    campaign_name: String,
+    campaign_name: Option<String>,
     /// ID of the Bid Modifier associated with this Campaign
-    bid_modifier_id: u64,
+    bid_modifier_id: Option<u64>,
     /// ID of the Delivery Modifier associated with this Campaign
-    delivery_modifier_id: u64,
+    delivery_modifier_id: Option<u64>,
     /// An alternative id to lookup the campaign, if desired
-    alternative_id: String,
+    alternative_id: Option<String>,
     /// Is it active?
-    active: bool,
-    create_date: String,
-    update_date: String,
+    active: Option<bool>,
+    create_date: Option<String>,
+    update_date: Option<String>,
 }
 
 impl Search<Campaign> for SearchCampaign {}

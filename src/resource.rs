@@ -4,18 +4,21 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 mod advertiser;
 mod authenticate;
 mod campaign;
+mod common;
 mod creative;
+mod line_item;
 
 pub use advertiser::*;
 pub use authenticate::*;
 pub use campaign::*;
+pub use common::*;
 pub use creative::*;
+pub use line_item::*;
 
 use std::fmt::Debug;
 
 pub trait Resource: Clone + Debug + Serialize + DeserializeOwned {
     const NAME: &'static str;
-    const ID_FIELD: &'static str;
 }
 
 pub trait Search<R: Resource>: Clone + Serialize {}

@@ -56,7 +56,6 @@ pub struct Advertiser {
 
 impl Resource for Advertiser {
     const NAME: &'static str = "advertiser";
-    const ID_FIELD: &'static str = "advertiser_id";
 }
 
 #[derive(Clone, Debug, Default, Serialize)]

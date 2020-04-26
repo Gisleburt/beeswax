@@ -144,7 +144,6 @@ pub struct Creative {
 
 impl Resource for Creative {
     const NAME: &'static str = "creative";
-    const ID_FIELD: &'static str = "creative_id";
 }
 
 #[derive(Clone, Default, Serialize)]
