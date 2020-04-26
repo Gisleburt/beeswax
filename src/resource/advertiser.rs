@@ -1,4 +1,4 @@
-use crate::resource::{Create, Delete, Resource, Search};
+use crate::resource::{Create, Delete, Find, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -59,7 +59,7 @@ impl Resource for Advertiser {
 }
 
 #[derive(Clone, Debug, Default, Serialize)]
-pub struct SearchAdvertiser {
+pub struct FindAdvertiser {
     /// Unique ID of the advertiser
     pub advertiser_id: Option<u64>,
     /// An alternative id to lookup the object, if desired
@@ -70,7 +70,7 @@ pub struct SearchAdvertiser {
     pub update_date: Option<String>,
 }
 
-impl Search<Advertiser> for SearchAdvertiser {}
+impl Find<Advertiser> for FindAdvertiser {}
 
 /// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
 /// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,

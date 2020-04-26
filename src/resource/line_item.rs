@@ -1,5 +1,5 @@
 use crate::resource::{
-    BiddingStratergy, Create, Delete, FrequencyCap, Resource, RevenueType, Search, WeightingMethod,
+    BiddingStratergy, Create, Delete, Find, FrequencyCap, Resource, RevenueType, WeightingMethod,
 };
 use serde::{Deserialize, Serialize};
 
@@ -82,7 +82,7 @@ impl Resource for LineItem {
 }
 
 #[derive(Clone, Default, Debug, Serialize)]
-struct SearchLineItem {
+struct FindLineItem {
     /// Unique ID of the Line Item
     line_item_id: Option<u64>,
     /// Must be a valid and active Campaign
@@ -108,7 +108,7 @@ struct SearchLineItem {
     update_date: Option<String>,
 }
 
-impl Search<LineItem> for SearchLineItem {}
+impl Find<LineItem> for FindLineItem {}
 
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 struct CreateLineItem {

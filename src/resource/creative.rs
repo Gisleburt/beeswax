@@ -1,4 +1,4 @@
-use crate::resource::{Advertiser, Create, Delete, Resource, Search};
+use crate::resource::{Advertiser, Create, Delete, Find, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use serde_repr::{Deserialize_repr, Serialize_repr};
@@ -147,7 +147,7 @@ impl Resource for Creative {
 }
 
 #[derive(Clone, Default, Serialize)]
-pub struct SearchCreative {
+pub struct FindCreative {
     /// Unique ID of the Creative
     pub creative_id: Option<u64>,
     /// Must belong to the same account as the Advertiser
@@ -166,12 +166,12 @@ pub struct SearchCreative {
     pub update_date: Option<String>,
 }
 
-impl Search<Creative> for SearchCreative {}
+impl Find<Creative> for FindCreative {}
 
 /// Create a search criteria for creatives for the given advertiser
-impl From<Advertiser> for SearchCreative {
+impl From<Advertiser> for FindCreative {
     fn from(adveritiser: Advertiser) -> Self {
-        SearchCreative {
+        FindCreative {
             advertiser_id: Some(adveritiser.advertiser_id),
             ..Default::default()
         }
