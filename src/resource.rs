@@ -3,11 +3,14 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 mod advertiser;
 mod authenticate;
+mod campaign;
 mod creative;
 
 pub use advertiser::*;
 pub use authenticate::*;
+pub use campaign::*;
 pub use creative::*;
+
 use std::fmt::Debug;
 
 pub trait Resource: Clone + Debug + Serialize + DeserializeOwned {
