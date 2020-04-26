@@ -1,6 +1,6 @@
 pub mod resource;
 
-use crate::resource::{Authenticate, Resource, Response, SearchCriteria};
+use crate::resource::{Authenticate, Resource, Response, Search};
 use reqwest::{Client, ClientBuilder};
 use std::error::Error;
 
@@ -36,7 +36,7 @@ impl BeeswaxApi {
     }
 
     /// Find objects of a given resource
-    pub async fn find<R: Resource, S: SearchCriteria<R>>(&self, criteria: &S) -> Result<Vec<R>> {
+    pub async fn find<R: Resource, S: Search<R>>(&self, criteria: &S) -> Result<Vec<R>> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.get(&url).query(criteria).build()?;
         let response = self.client.execute(request).await?;

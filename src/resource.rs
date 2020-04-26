@@ -15,7 +15,7 @@ pub trait Resource: Debug + DeserializeOwned {
     const ID_FIELD: &'static str;
 }
 
-pub trait SearchCriteria<T: Resource>: Serialize {}
+pub trait Search<T: Resource>: Serialize {}
 
 pub trait Create<T: Resource>: Serialize {}
 

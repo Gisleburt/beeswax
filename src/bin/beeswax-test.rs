@@ -10,14 +10,15 @@ async fn main() {
         .auth(Authenticate::simple(user, password))
         .await
         .unwrap();
-    let criteria = AdvertiserSearchCriteria {
+    let criteria = SearchAdvertiser {
         advertiser_id: Some(496),
         ..Default::default()
     };
     let mut advertiser = beeswax_api.find(&criteria).await.unwrap();
     // dbg!(advertiser);
-    let mut creative_criteria: CreativeSearchCriteria = advertiser.pop().unwrap().into();
-    creative_criteria.creative_name = Some("2019-20200306-medium_large_rectangle 300x250".to_string());
+    let mut creative_criteria: SearchCreative = advertiser.pop().unwrap().into();
+    creative_criteria.creative_name =
+        Some("2019-20200306-medium_large_rectangle 300x250".to_string());
     let creatives = beeswax_api.find(&creative_criteria).await.unwrap();
     dbg!(creatives);
 }
