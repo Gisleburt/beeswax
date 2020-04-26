@@ -2,7 +2,7 @@ use crate::resource::Resource;
 use serde::{Deserialize, Serialize};
 
 /// The authenticate API method allows you to login to Buzz, change your password and logout
-#[derive(Default, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Default, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Authenticate {
     /// User Email
     pub email: String,

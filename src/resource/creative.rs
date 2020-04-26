@@ -1,9 +1,9 @@
-use crate::resource::{Advertiser, Resource, Search, Create};
+use crate::resource::{Advertiser, Create, Delete, Resource, Search};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
 #[repr(u8)]
 pub enum CreativeType {
     Banner = 0,
@@ -11,11 +11,17 @@ pub enum CreativeType {
     Native = 2,
 }
 
+impl Default for CreativeType {
+    fn default() -> Self {
+        CreativeType::Banner
+    }
+}
+
 /// A Creative object defines the payload to be delivered to the end user. Creatives belong to
 /// Advertisers and are associated with Line Items. The Creative object has interactions with
 /// Creative Templates and Creative Assets / Video Assets as described in Creatives, Creative
 /// Assets, Templates, Rules.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Creative {
     /// Unique ID of the Creative
     pub creative_id: u64,
@@ -131,7 +137,7 @@ pub struct Creative {
     pub push_status: Option<u64>,
     pub push_update: Option<bool>,
     pub account_id: Option<u64>,
-    pub create_date: Option<Striu64g>,
+    pub create_date: Option<String>,
     pub update_date: Option<String>,
     pub buzz_key: Option<String>,
 }
@@ -141,7 +147,7 @@ impl Resource for Creative {
     const ID_FIELD: &'static str = "creative_id";
 }
 
-#[derive(Default, Serialize)]
+#[derive(Clone, Default, Serialize)]
 pub struct SearchCreative {
     /// Unique ID of the Creative
     pub creative_id: Option<u64>,
@@ -173,7 +179,7 @@ impl From<Advertiser> for SearchCreative {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CreateCreative {
     /// Must belong to the same account as the Advertiser and be active
     pub advertiser_id: u64,
@@ -274,4 +280,48 @@ pub struct CreateCreative {
     pub active: Option<bool>,
 }
 
-impl Create<Creative> for CreateCreative {}
+impl Create<Creative> for CreateCreative {
+    fn into_resource(self, creative_id: u64) -> Creative {
+        Creative {
+            creative_id,
+            advertiser_id: self.advertiser_id,
+            creative_name: self.creative_name,
+            creative_type: self.creative_type,
+            width: self.width,
+            height: self.height,
+            sizeless: self.sizeless,
+            secure: self.secure,
+            click_url: self.click_url,
+            // creative_assets: self.creative_assets,
+            primary_asset: self.primary_asset,
+            secondary_asset: self.secondary_asset,
+            native_offer: self.native_offer,
+            creative_content: self.creative_content,
+            creative_content_tag: self.creative_content_tag,
+            creative_template_id: self.creative_template_id,
+            creative_rule_id: self.creative_rule_id,
+            creative_rule_key: self.creative_rule_key,
+            attributes: self.attributes,
+            pixels: self.pixels,
+            events: self.events,
+            progress_events: self.progress_events,
+            creative_addons: self.creative_addons,
+            creative_thumbnail_url: self.creative_thumbnail_url,
+            start_date: self.start_date,
+            end_date: self.end_date,
+            alternative_id: self.alternative_id,
+            notes: self.notes,
+            active: self.active,
+            ..Default::default()
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize)]
+struct DeleteCreative {
+    creative_id: u64,
+}
+
+impl Delete<Creative> for DeleteCreative {}
+
+impl Delete<Creative> for Creative {}

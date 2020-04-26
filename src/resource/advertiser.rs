@@ -1,11 +1,11 @@
-use crate::resource::{Resource, Search, Create};
+use crate::resource::{Create, Delete, Resource, Search};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
 /// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
 /// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
 /// Creatives.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Advertiser {
     /// Unique ID of the advertiser
     pub advertiser_id: u64,
@@ -59,7 +59,7 @@ impl Resource for Advertiser {
     const ID_FIELD: &'static str = "advertiser_id";
 }
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize)]
 pub struct SearchAdvertiser {
     /// Unique ID of the advertiser
     pub advertiser_id: Option<u64>,
@@ -76,7 +76,7 @@ impl Search<Advertiser> for SearchAdvertiser {}
 /// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
 /// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
 /// Creatives.
-#[derive(Default, Debug, Deserialize)]
+#[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct CreateAdvertiser {
     /// Unique name for the advertiser, must be unique per account.
     pub advertiser_name: String,
@@ -118,4 +118,32 @@ pub struct CreateAdvertiser {
     pub active: Option<bool>,
 }
 
-impl Create<Advertiser> for CreateAdvertiser {}
+impl Create<Advertiser> for CreateAdvertiser {
+    fn into_resource(self, advertiser_id: u64) -> Advertiser {
+        Advertiser {
+            advertiser_id,
+            advertiser_name: self.advertiser_name,
+            attributes: self.attributes,
+            conversion_method_id: self.conversion_method_id,
+            default_click_url: self.default_click_url,
+            default_continent: self.default_continent,
+            default_currency: self.default_currency,
+            default_creative_thumbnail_url: self.default_creative_thumbnail_url,
+            default_campaign_preset_id: self.default_campaign_preset_id,
+            default_line_item_preset_id: self.default_line_item_preset_id,
+            alternative_id: self.alternative_id,
+            notes: self.notes,
+            active: self.active,
+            ..Default::default()
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize)]
+struct DeleteAdvertiser {
+    advertiser_id: u64,
+}
+
+impl Delete<Advertiser> for DeleteAdvertiser {}
+
+impl Delete<Advertiser> for Advertiser {}

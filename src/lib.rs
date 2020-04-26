@@ -1,6 +1,8 @@
 pub mod resource;
 
-use crate::resource::{Authenticate, Resource, Response, Search};
+use crate::resource::{
+    Authenticate, Create, Delete, Resource, ResponseId, ResponseResource, Search,
+};
 use reqwest::{Client, ClientBuilder};
 use std::error::Error;
 
@@ -35,14 +37,53 @@ impl BeeswaxApi {
         BeeswaxApiBuilder { base_url }
     }
 
-    /// Find objects of a given resource
+    /// Find resources based on a search criteria
     pub async fn find<R: Resource, S: Search<R>>(&self, criteria: &S) -> Result<Vec<R>> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.get(&url).query(criteria).build()?;
         let response = self.client.execute(request).await?;
-        let response: Response<R> = response.json().await?;
+        let response: ResponseResource<R> = response.json().await?;
         if response.success {
             Ok(response.payload)
+        } else {
+            panic!("non-successful")
+        }
+    }
+
+    /// Create a given resource
+    pub async fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
+        let url = format!("{}/rest/{}", &self.base_url, R::NAME);
+        let request = self.client.post(&url).json(&create).build()?;
+        let response = self.client.execute(request).await?;
+        let response: ResponseId = response.json().await?;
+        if response.success {
+            Ok(create.clone().into_resource(response.payload.id))
+        } else {
+            panic!("non-successful")
+        }
+    }
+
+    /// Update a given resource
+    pub async fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
+        let url = format!("{}/rest/{}", &self.base_url, R::NAME);
+        let request = self.client.put(&url).json(&resource).build()?;
+        let response = self.client.execute(request).await?;
+        let response: ResponseId = response.json().await?;
+        if response.success {
+            Ok(resource)
+        } else {
+            panic!("non-successful")
+        }
+    }
+
+    /// Delete a given resource
+    pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: D) -> Result<()> {
+        let url = format!("{}/rest/{}", &self.base_url, R::NAME);
+        let request = self.client.delete(&url).json(&delete).build()?;
+        let response = self.client.execute(request).await?;
+        let response: ResponseId = response.json().await?;
+        if response.success {
+            Ok(())
         } else {
             panic!("non-successful")
         }
