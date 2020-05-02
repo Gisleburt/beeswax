@@ -3,6 +3,13 @@ name = "beeswax"
 version = "0.1.0"
 authors = ["Daniel Mason <daniel.mason@triptease.com>"]
 edition = "2018"
+description = "An easy to use CRUD client for the Beeswax API"
+license = "MIT"
+homepage = "https://github.com/gisleburt/beeswax/"
+repository = "https://github.com/gisleburt/beeswax/"
+readme = "README.md"
+keywords = ["beeswax", "ad-tech", "api", "asynchronous"]
+categories = ["api-bindings", "asynchronous",]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
