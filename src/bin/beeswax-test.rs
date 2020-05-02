@@ -1,12 +1,12 @@
 use beeswax::resource::*;
-use beeswax::BeeswaxApi;
+use beeswax::BeeswaxClient;
 
 #[tokio::main]
 async fn main() {
     let user = get_env_var("BEESWAX_USER");
     let password = get_env_var("BEESWAX_PASSWORD");
 
-    let beeswax_api = BeeswaxApi::builder("https://triptease.api.beeswax.com".to_string())
+    let beeswax_api = BeeswaxClient::builder("https://triptease.api.beeswax.com".to_string())
         .auth(Authenticate::simple(user, password))
         .await
         .unwrap();
@@ -24,5 +24,5 @@ async fn main() {
 }
 
 fn get_env_var(name: &str) -> String {
-    std::env::var(name).expect(format!("{} not defined", name).as_str())
+    std::env::var(name).unwrap_or_else(|_| panic!("{} not defined", name))
 }

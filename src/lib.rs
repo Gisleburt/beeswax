@@ -12,11 +12,11 @@ pub struct BeeswaxApiBuilder {
 }
 
 impl BeeswaxApiBuilder {
-    pub async fn auth(self, auth: Authenticate) -> Result<BeeswaxApi> {
+    pub async fn auth(self, auth: Authenticate) -> Result<BeeswaxClient> {
         let client = ClientBuilder::new().cookie_store(true).build()?;
         let url = format!("{}/rest/authenticate", &self.base_url);
         client.post(&url).json(&auth).send().await?;
-        Ok(BeeswaxApi {
+        Ok(BeeswaxClient {
             base_url: self.base_url,
             client,
         })
@@ -24,12 +24,12 @@ impl BeeswaxApiBuilder {
 }
 
 /// Provides an interface to the Beeswax Api
-pub struct BeeswaxApi {
+pub struct BeeswaxClient {
     base_url: String,
     client: Client,
 }
 
-impl BeeswaxApi {
+impl BeeswaxClient {
     /// Creates the API builder
     pub fn builder(base_url: String) -> BeeswaxApiBuilder {
         BeeswaxApiBuilder { base_url }
