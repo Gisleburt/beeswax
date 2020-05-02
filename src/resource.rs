@@ -23,7 +23,7 @@ pub trait Resource: Clone + Debug + Serialize + DeserializeOwned {
     const NAME: &'static str;
 }
 
-pub trait Find<R: Resource>: Clone + Serialize {}
+pub trait Read<R: Resource>: Clone + Serialize {}
 
 pub trait Create<R: Resource>: Clone + Serialize {
     fn into_resource(self, id: u64) -> R;

@@ -1,5 +1,5 @@
-use beeswax_rs::resource::*;
-use beeswax_rs::BeeswaxApi;
+use beeswax::resource::*;
+use beeswax::BeeswaxApi;
 
 #[tokio::main]
 async fn main() {
@@ -10,16 +10,16 @@ async fn main() {
         .auth(Authenticate::simple(user, password))
         .await
         .unwrap();
-    let criteria = FindAdvertiser {
+    let criteria = ReadAdvertiser {
         advertiser_id: Some(496),
         ..Default::default()
     };
-    let mut advertiser = beeswax_api.find(&criteria).await.unwrap();
+    let mut advertiser = beeswax_api.read(&criteria).await.unwrap();
     // dbg!(advertiser);
-    let mut creative_criteria: FindCreative = advertiser.pop().unwrap().into();
+    let mut creative_criteria: ReadCreative = advertiser.pop().unwrap().into();
     creative_criteria.creative_name =
         Some("2019-20200306-medium_large_rectangle 300x250".to_string());
-    let creatives = beeswax_api.find(&creative_criteria).await.unwrap();
+    let creatives = beeswax_api.read(&creative_criteria).await.unwrap();
     dbg!(creatives);
 }
 

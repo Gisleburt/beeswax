@@ -23,7 +23,7 @@ impl Authenticate {
     /// Create a simple authentication object with a username and password
     /// See [Authentication](https://docs.beeswax.com/docs/authentication)
     /// ```rust
-    /// use beeswax_rs::resource::Authenticate;
+    /// use beeswax::resource::Authenticate;
     ///
     /// let authentication = Authenticate::simple("example@example.com".to_string(), "password".to_string());
     /// assert_eq!(

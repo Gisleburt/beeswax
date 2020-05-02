@@ -1,4 +1,4 @@
-use crate::resource::{Create, Delete, Find, FrequencyCap, Resource, RevenueType};
+use crate::resource::{Create, Delete, Read, FrequencyCap, Resource, RevenueType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
@@ -95,7 +95,7 @@ impl Resource for Campaign {
 }
 
 #[derive(Clone, Debug, Default, Serialize)]
-pub struct FindCampaign {
+pub struct ReadCampaign {
     /// Unique ID of the campaign
     campaign_id: Option<u64>,
     /// Id of the Advertiser the campaign belongs too
@@ -114,7 +114,7 @@ pub struct FindCampaign {
     update_date: Option<String>,
 }
 
-impl Find<Campaign> for FindCampaign {}
+impl Read<Campaign> for ReadCampaign {}
 
 #[derive(Clone, Debug, Default, Serialize)]
 struct CreateCampaign {

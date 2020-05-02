@@ -1,4 +1,4 @@
-use crate::resource::{Create, Delete, Find, Resource};
+use crate::resource::{Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
@@ -35,7 +35,7 @@ impl Resource for CreativeLineItem {
 }
 
 #[derive(Clone, Default, Serialize)]
-struct FindCreativeLineItem {
+struct ReadCreativeLineItem {
     /// Unique ID of the Creative Line Item association
     cli_id: Option<u64>,
     /// Unique ID of the Creative.
@@ -50,7 +50,7 @@ struct FindCreativeLineItem {
     active: Option<bool>,
 }
 
-impl Find<CreativeLineItem> for CreativeLineItem {}
+impl Read<CreativeLineItem> for CreativeLineItem {}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct CreateCreativeLineItem {

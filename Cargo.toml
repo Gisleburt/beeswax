@@ -1,5 +1,5 @@
 [package]
-name = "beeswax-rs"
+name = "beeswax"
 version = "0.1.0"
 authors = ["Daniel Mason <daniel.mason@triptease.com>"]
 edition = "2018"
