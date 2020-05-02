@@ -18,7 +18,13 @@ fn create_readme() -> Result<(), Box<dyn Error>> {
         let line = result.expect("Could not read line");
         if let Some(capture) = comment_capture.captures_iter(&line).next() {
             if let Some(comment) = capture.name("comment") {
-                readme_lines.push(comment.as_str().to_string())
+                // If it's a comment ignore it: Note, do not use # for titles
+                if comment.as_str() == "#" || comment.as_str().find("# ") == Some(0) {
+                    continue;
+                }
+                // Swap `no_run` code snippets for `rust`
+                let modified_comment = comment.as_str().replace("```no_run", "```rust");
+                readme_lines.push(modified_comment)
             }
         }
     }
