@@ -71,7 +71,7 @@
 //!
 //! let read_advertiser = beeswax_api.read(&read_advertiser).await?.pop().unwrap();
 //!
-//! beeswax_api.delete(read_advertiser).await?;
+//! beeswax_api.delete(&read_advertiser).await?;
 //! # Ok(())
 //! # }
 //! ```
@@ -153,7 +153,7 @@ impl BeeswaxClient {
     }
 
     /// Delete a given resource
-    pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: D) -> Result<()> {
+    pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.delete(&url).json(&delete).build()?;
         let response = self.client.execute(request).await?;
