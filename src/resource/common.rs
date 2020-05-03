@@ -28,13 +28,55 @@ impl Default for CreativeType {
     }
 }
 
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+pub enum BudgetType {
+    Spend = 0,
+    Impressions = 1,
+    SpendWithVendorFees = 2,
+}
+
+impl Default for BudgetType {
+    fn default() -> Self {
+        BudgetType::Spend
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct FrequencyCap {
     /// Duration of time in which to cap impressions, in seconds. 30-day (2592000) max.
-    duration: Option<u64>,
+    pub duration: Option<u64>,
 
     /// Number of impressions to allow within the duration set
-    impressions: Option<u64>,
+    pub impressions: Option<u64>,
+}
+
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+/// Beeswax supports flexible ways to use inbound auction data to frequency cap. Which method is
+/// used depends on the frequency_cap_type field defined at the Campaign and Line Item level.
+/// Important note: Not all types are supported by default and your account may need to be enabled
+/// for some of the more advanced types. Please reach out to your account manager or support for
+/// more details.
+pub enum FrequencyCapType {
+    /// Use the browser cookie OR the device ID to cap.
+    Standard = 0,
+    /// Use the IP address of the end-user as included in the bid request. Ignore values where the
+    /// final octet is truncated or where due to GDPR or other privacy regulation we do not have
+    /// consent to use the full IP address.
+    IpAddress = 1,
+    /// Use the browser cookie or device ID when present, then fall back to IP address when not
+    /// present.
+    StandardWithFallback = 2,
+    /// Use an auction-provided customer ID when present, then fall back to the Standard option when
+    /// customer ID is not present.
+    CustomerIdWithFallback = 3,
+}
+
+impl Default for FrequencyCapType {
+    fn default() -> Self {
+        FrequencyCapType::Standard
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]

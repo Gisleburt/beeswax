@@ -1,4 +1,4 @@
-use crate::resource::{Create, Delete, FrequencyCap, Read, Resource, RevenueType};
+use crate::resource::{BudgetType, Create, Delete, FrequencyCap, Read, Resource, RevenueType, FrequencyCapType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
@@ -21,7 +21,7 @@ struct Campaign {
     pub daily_budget: Option<f64>,
 
     /// Type of budget, 0=spend, 1=impressions, 2=spend with vendor fees
-    pub budget_type: Option<u64>,
+    pub budget_type: Option<BudgetType>,
 
     /// Supported revenue types: CPM, CPC, CPCV, CPI, CPA
     pub revenue_type: Option<RevenueType>,
@@ -30,9 +30,8 @@ struct Campaign {
     /// revenue_type is CPM and revenue_amount is 5.12, revenue will be calculated as a $5.12 CPM.
     pub revenue_amount: Option<f64>,
 
-    /// This field is deprecated. Pacing is available at the Line Item level.
-    pub pacing: Option<u64>,
-
+    // This field is deprecated. Pacing is available at the Line Item level.
+    // pub pacing: Option<u64>,
     /// ID of a Bid Modifier object to associate with the Campaign. If set, max_bid must also be
     /// set.
     pub bid_modifier_id: Option<u64>,
@@ -56,7 +55,7 @@ struct Campaign {
 
     /// The method of frequency capping. All Line Items must match Campaign-level if set. For
     /// definitions, see the Frequency Cap guide.
-    pub frequency_cap_type: Option<u64>,
+    pub frequency_cap_type: Option<FrequencyCapType>,
 
     /// Continents in which the Campaign is eligible to serve. Inherited from the Advertiser object
     /// if left blank.
@@ -117,7 +116,7 @@ pub struct ReadCampaign {
 impl Read<Campaign> for ReadCampaign {}
 
 #[derive(Clone, Debug, Default, Serialize)]
-struct CreateCampaign {
+pub struct CreateCampaign {
     /// Must belong to the same account as the Campaign and be active
     pub advertiser_id: u64,
 
@@ -133,7 +132,7 @@ struct CreateCampaign {
     pub daily_budget: Option<f64>,
 
     /// Type of budget, 0=spend, 1=impressions, 2=spend with vendor fees
-    pub budget_type: Option<u64>,
+    pub budget_type: Option<BudgetType>,
 
     /// Supported revenue types: CPM, CPC, CPCV, CPI, CPA
     pub revenue_type: Option<RevenueType>,
@@ -142,9 +141,8 @@ struct CreateCampaign {
     /// revenue_type is CPM and revenue_amount is 5.12, revenue will be calculated as a $5.12 CPM.
     pub revenue_amount: Option<f64>,
 
-    /// This field is deprecated. Pacing is available at the Line Item level.
-    pub pacing: Option<u64>,
-
+    // This field is deprecated. Pacing is available at the Line Item level.
+    // pub pacing: Option<u64>,
     /// ID of a Bid Modifier object to associate with the Campaign. If set, max_bid must also be
     /// set.
     pub bid_modifier_id: Option<u64>,
@@ -168,7 +166,7 @@ struct CreateCampaign {
 
     /// The method of frequency capping. All Line Items must match Campaign-level if set. For
     /// definitions, see the Frequency Cap guide.
-    pub frequency_cap_type: Option<u64>,
+    pub frequency_cap_type: Option<FrequencyCapType>,
 
     /// Continents in which the Campaign is eligible to serve. Inherited from the Advertiser object
     /// if left blank.
@@ -199,7 +197,6 @@ impl Create<Campaign> for CreateCampaign {
             budget_type: self.budget_type,
             revenue_type: self.revenue_type,
             revenue_amount: self.revenue_amount,
-            pacing: self.pacing,
             bid_modifier_id: self.bid_modifier_id,
             delivery_modifier_id: self.delivery_modifier_id,
             max_bid: self.max_bid,
