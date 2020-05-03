@@ -1,5 +1,32 @@
 use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 use std::collections::HashMap;
+
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr, PartialEq)]
+#[repr(u8)]
+pub enum ConversionMethod {
+    LastClick = 1,
+}
+
+impl Default for ConversionMethod {
+    fn default() -> Self {
+        ConversionMethod::LastClick
+    }
+}
+
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+pub enum CreativeType {
+    Banner = 0,
+    Video = 1,
+    Native = 2,
+}
+
+impl Default for CreativeType {
+    fn default() -> Self {
+        CreativeType::Banner
+    }
+}
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct FrequencyCap {

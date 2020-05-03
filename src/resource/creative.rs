@@ -1,21 +1,6 @@
-use crate::resource::{Advertiser, Create, Delete, Read, Resource};
+use crate::resource::{Advertiser, Create, CreativeType, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
-use serde_repr::{Deserialize_repr, Serialize_repr};
-
-#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
-#[repr(u8)]
-pub enum CreativeType {
-    Banner = 0,
-    Video = 1,
-    Native = 2,
-}
-
-impl Default for CreativeType {
-    fn default() -> Self {
-        CreativeType::Banner
-    }
-}
 
 /// A Creative object defines the payload to be delivered to the end user. Creatives belong to
 /// Advertisers and are associated with Line Items. The Creative object has interactions with

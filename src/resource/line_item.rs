@@ -1,5 +1,5 @@
 use crate::resource::{
-    BiddingStratergy, Create, Delete, Read, FrequencyCap, Resource, RevenueType, WeightingMethod,
+    BiddingStratergy, Create, Delete, FrequencyCap, Read, Resource, RevenueType, WeightingMethod,
 };
 use serde::{Deserialize, Serialize};
 

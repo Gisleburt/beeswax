@@ -1,11 +1,11 @@
-use crate::resource::{Create, Delete, Read, Resource};
+use crate::resource::{ConversionMethod, Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
 /// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
 /// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
 /// Creatives.
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq)]
 pub struct Advertiser {
     /// Unique ID of the advertiser
     pub advertiser_id: u64,
@@ -24,7 +24,7 @@ pub struct Advertiser {
     /// attribution method as found in the conversion_atrtibution_methods view. At this time only
     /// method 1 (last click) is supported. Once a conversion method is chosen, it cannot be
     /// changed.
-    pub conversion_method_id: Option<u64>,
+    pub conversion_method_id: Option<ConversionMethod>,
     /// Click URL to use by default for objects created under this advertiser
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
@@ -92,7 +92,7 @@ pub struct CreateAdvertiser {
     /// attribution method as found in the conversion_atrtibution_methods view. At this time only
     /// method 1 (last click) is supported. Once a conversion method is chosen, it cannot be
     /// changed.
-    pub conversion_method_id: Option<u64>,
+    pub conversion_method_id: Option<ConversionMethod>,
     /// Click URL to use by default for objects created under this advertiser
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
