@@ -4,16 +4,16 @@ use reqwest::{Client, ClientBuilder};
 use crate::Result;
 
 /// Creates the BeeswaxApi client. This type is instantiated from the BeeswaxApi struct.
-pub struct BeeswaxClientBuilder {
+pub struct AsyncBeeswaxClientBuilder {
     base_url: String,
 }
 
-impl BeeswaxClientBuilder {
-    pub async fn auth(self, auth: Authenticate) -> Result<BeeswaxClient> {
+impl AsyncBeeswaxClientBuilder {
+    pub async fn auth(self, auth: Authenticate) -> Result<AsyncBeeswaxClient> {
         let client = ClientBuilder::new().cookie_store(true).build()?;
         let url = format!("{}/rest/authenticate", &self.base_url);
         client.post(&url).json(&auth).send().await?;
-        Ok(BeeswaxClient {
+        Ok(AsyncBeeswaxClient {
             base_url: self.base_url,
             client,
         })
@@ -21,15 +21,15 @@ impl BeeswaxClientBuilder {
 }
 
 /// Provides an interface to the Beeswax Api
-pub struct BeeswaxClient {
+pub struct AsyncBeeswaxClient {
     base_url: String,
     client: Client,
 }
 
-impl BeeswaxClient {
+impl AsyncBeeswaxClient {
     /// Creates the API builder
-    pub fn builder(base_url: String) -> BeeswaxClientBuilder {
-        BeeswaxClientBuilder { base_url }
+    pub fn builder(base_url: String) -> AsyncBeeswaxClientBuilder {
+        AsyncBeeswaxClientBuilder { base_url }
     }
 
     /// Find resources based on a search criteria

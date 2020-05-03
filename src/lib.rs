@@ -23,13 +23,13 @@
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {
-//! use beeswax::{BeeswaxClient, resource::Authenticate};
+//! use beeswax::{AsyncBeeswaxClient, resource::Authenticate};
 //!
 //! let user = std::env::var("BEESWAX_USER")?;
 //! let password = std::env::var("BEESWAX_PASSWORD")?;
 //! let url = "https://buzzkey.api.beeswax.com".to_string();
 //!
-//! let beeswax_api = BeeswaxClient::builder(url)
+//! let beeswax_api = AsyncBeeswaxClient::builder(url)
 //!     .auth(Authenticate::simple(user, password))
 //!     .await?;
 //! # Ok(())
@@ -42,14 +42,14 @@
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {
-//! # use beeswax::{BeeswaxClient, resource::Authenticate};
+//! # use beeswax::{AsyncBeeswaxClient, resource::Authenticate};
 //! use beeswax::resource::{CreateAdvertiser, ReadAdvertiser};
 //! #
 //! # let user = std::env::var("BEESWAX_USER")?;
 //! # let password = std::env::var("BEESWAX_PASSWORD")?;
 //! # let url = "https://buzzkey.api.beeswax.com".to_string();
 //! #
-//! # let beeswax_api = BeeswaxClient::builder(url)
+//! # let beeswax_api = AsyncBeeswaxClient::builder(url)
 //! #     .auth(Authenticate::simple(user, password))
 //! #     .await?;
 //!
@@ -79,7 +79,7 @@
 mod client;
 pub mod resource;
 
-pub use client::{BeeswaxClient, BeeswaxClientBuilder};
+pub use client::{AsyncBeeswaxClient, AsyncBeeswaxClientBuilder};
 
 use std::error::Error;
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
