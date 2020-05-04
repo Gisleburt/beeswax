@@ -1,22 +1,14 @@
 //! A collection of resources to use with the api
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-mod advertiser;
-mod authenticate;
-mod campaign;
+pub mod advertiser;
+pub mod authenticate;
+pub mod campaign;
 pub mod common;
-mod creative;
-mod creative_line_item;
-mod line_item;
-mod view;
-
-pub use advertiser::*;
-pub use authenticate::*;
-pub use campaign::*;
-pub use creative::*;
-pub use creative_line_item::*;
-pub use line_item::*;
-pub use view::*;
+pub mod creative;
+pub mod creative_line_item;
+pub mod line_item;
+pub mod view;
 
 use std::fmt::Debug;
 

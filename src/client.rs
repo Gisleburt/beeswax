@@ -1,4 +1,6 @@
-use crate::resource::{Authenticate, Create, Delete, Read, Resource, ResponseId, ResponseResource};
+use crate::resource::{
+    authenticate::Authenticate, Create, Delete, Read, Resource, ResponseId, ResponseResource,
+};
 use reqwest::{Client, ClientBuilder};
 
 use crate::Result;
