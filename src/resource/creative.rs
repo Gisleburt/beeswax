@@ -1,4 +1,4 @@
-use crate::resource::{Advertiser, Create, CreativeType, Delete, Read, Resource};
+use crate::resource::{common::CreativeType, Advertiser, Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 

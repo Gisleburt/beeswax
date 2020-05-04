@@ -1,4 +1,4 @@
-use crate::resource::{ConversionMethod, Create, Delete, Read, Resource};
+use crate::resource::{common::ConversionMethod, Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 

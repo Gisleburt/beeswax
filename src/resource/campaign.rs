@@ -1,4 +1,7 @@
-use crate::resource::{BudgetType, Create, Delete, FrequencyCap, Read, Resource, RevenueType, FrequencyCapType};
+use crate::resource::{
+    common::{BudgetType, FrequencyCap, FrequencyCapType, RevenueType},
+    Create, Delete, Read, Resource,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]

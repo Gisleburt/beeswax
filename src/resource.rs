@@ -4,18 +4,19 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 mod advertiser;
 mod authenticate;
 mod campaign;
-mod common;
+pub mod common;
 mod creative;
 mod creative_line_item;
 mod line_item;
+mod view;
 
 pub use advertiser::*;
 pub use authenticate::*;
 pub use campaign::*;
-pub use common::*;
 pub use creative::*;
 pub use creative_line_item::*;
 pub use line_item::*;
+pub use view::*;
 
 use std::fmt::Debug;
 

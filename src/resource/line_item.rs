@@ -1,5 +1,6 @@
 use crate::resource::{
-    BiddingStratergy, Create, Delete, FrequencyCap, Read, Resource, RevenueType, WeightingMethod,
+    common::{BiddingStratergy, FrequencyCap, RevenueType, WeightingMethod},
+    Create, Delete, Read, Resource,
 };
 use serde::{Deserialize, Serialize};
 
