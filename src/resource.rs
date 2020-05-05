@@ -1,6 +1,7 @@
 //! A collection of resources to use with the api
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
+pub mod account_alerts;
 pub mod advertiser;
 pub mod authenticate;
 pub mod campaign;
