@@ -1,7 +1,8 @@
+//! The authenticate API method allows you to login to Buzz, change your password and logout
+
 use crate::resource::Resource;
 use serde::{Deserialize, Serialize};
 
-/// The authenticate API method allows you to login to Buzz, change your password and logout
 #[derive(Clone, Default, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Authenticate {
     /// User Email
@@ -23,7 +24,7 @@ impl Authenticate {
     /// Create a simple authentication object with a username and password
     /// See [Authentication](https://docs.beeswax.com/docs/authentication)
     /// ```rust
-    /// use beeswax::resource::Authenticate;
+    /// use beeswax::resource::authenticate::Authenticate;
     ///
     /// let authentication = Authenticate::simple("example@example.com".to_string(), "password".to_string());
     /// assert_eq!(

@@ -1,10 +1,11 @@
+//! Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
+//! entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
+//! Creatives.
+
 use crate::resource::{common::ConversionMethod, Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
-/// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
-/// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
-/// Creatives.
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq)]
 pub struct Advertiser {
     /// Unique ID of the advertiser
@@ -72,9 +73,6 @@ pub struct ReadAdvertiser {
 
 impl Read<Advertiser> for ReadAdvertiser {}
 
-/// Every Campaign, Line Item, and Creatives belongs to an Advertiser. Advertisers are typically the
-/// entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
-/// Creatives.
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct CreateAdvertiser {
     /// Unique name for the advertiser, must be unique per account.

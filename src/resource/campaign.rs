@@ -1,3 +1,6 @@
+//! A Campaign object defines the overall budget and timing for one or more Line Items. Campaigns
+//! belong to a single Advertisers.
+
 use crate::resource::{
     common::{BudgetType, FrequencyCap, FrequencyCapType, RevenueType},
     Create, Delete, Read, Resource,

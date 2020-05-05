@@ -1,3 +1,7 @@
+//! A Line Item object defines the objectives, budget and timing for a portion of a Campaign. Line
+//! Items belong to a single Campaign, may be associated with one or more Creatives using the
+//! Creative Line Item Association, and are associated with a single Targeting Template.
+
 use crate::resource::{
     common::{BiddingStratergy, FrequencyCap, RevenueType, WeightingMethod},
     Create, Delete, Read, Resource,

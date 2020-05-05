@@ -1,11 +1,12 @@
-use crate::resource::{Read, Resource};
+//! The View API method allows you to flexibly GET data from the Buzz system. It is especially
+//! useful for querying static tables to discover ad types. acceptable mime types, or other lookup
+//! fields. Views must be created by the Buzz administrator. Only GET requests are supported.
+
+use crate::resource::{common::ViewName, Read, Resource};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use std::ops::Deref;
 
-/// The View API method allows you to flexibly GET data from the Buzz system. It is especially
-/// useful for querying static tables to discover ad types. acceptable mime types, or other lookup
-/// fields. Views must be created by the Buzz administrator. Only GET requests are supported.
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct View(JsonValue);
 

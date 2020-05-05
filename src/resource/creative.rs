@@ -1,11 +1,14 @@
-use crate::resource::{common::CreativeType, advertiser::Advertiser, Create, Delete, Read, Resource};
+//! A Creative object defines the payload to be delivered to the end user. Creatives belong to
+//! Advertisers and are associated with Line Items. The Creative object has interactions with
+//! Creative Templates and Creative Assets / Video Assets as described in Creatives, Creative
+//! Assets, Templates, Rules.
+
+use crate::resource::{
+    advertiser::Advertiser, common::CreativeType, Create, Delete, Read, Resource,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
-/// A Creative object defines the payload to be delivered to the end user. Creatives belong to
-/// Advertisers and are associated with Line Items. The Creative object has interactions with
-/// Creative Templates and Creative Assets / Video Assets as described in Creatives, Creative
-/// Assets, Templates, Rules.
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Creative {
     /// Unique ID of the Creative

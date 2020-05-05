@@ -1,3 +1,6 @@
+//! A Creative Line Item object associates a Creative with a Line Item. A Line Item cannot be active
+//! until it has one or more active Creatives associated through this method.
+
 use crate::resource::{Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 
