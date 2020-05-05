@@ -10,6 +10,7 @@ pub mod creative;
 pub mod creative_line_item;
 pub mod line_item;
 pub mod view;
+pub mod view_list;
 
 use std::fmt::Debug;
 
