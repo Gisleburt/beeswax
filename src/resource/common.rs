@@ -245,3 +245,47 @@ pub enum ViewName {
     #[serde(rename = "video_protocols")]
     VideoProtocols,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum Continent {
+    #[serde(rename = "APAC")]
+    AsiaPacific,
+    #[serde(rename = "EMEA")]
+    Europe,
+    #[serde(rename = "NAM")]
+    NorthAmerica,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum Currency {
+    #[serde(rename = "AUD")]
+    AustralianDollar,
+    #[serde(rename = "BRL")]
+    BrazilianReal,
+    #[serde(rename = "CAD")]
+    CanadianDollar,
+    #[serde(rename = "CHF")]
+    SwissFranc,
+    #[serde(rename = "EUR")]
+    Euro,
+    #[serde(rename = "GBP")]
+    GreatBritishPound,
+    #[serde(rename = "HKD")]
+    HongKongDollar,
+    #[serde(rename = "JPY")]
+    JapaneseYen,
+    #[serde(rename = "KRW")]
+    SouthKoreanWon,
+    #[serde(rename = "MXN")]
+    MexicanPeso,
+    #[serde(rename = "NZD")]
+    NewZealandDollar,
+    #[serde(rename = "SEK")]
+    SwedishKrona,
+    #[serde(rename = "SGD")]
+    SingaporeDollar,
+    #[serde(rename = "UAH")]
+    UkrainianHryvnia,
+    #[serde(rename = "USD")]
+    UnitedStatesDollar,
+}

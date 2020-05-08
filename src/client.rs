@@ -1,7 +1,7 @@
 use crate::resource::{
     authenticate::Authenticate, Create, Delete, Read, Resource, ResponseId, ResponseResource,
 };
-use reqwest::{Client, ClientBuilder};
+use reqwest::{Client, ClientBuilder, Response};
 
 use crate::Result;
 
@@ -51,7 +51,12 @@ impl AsyncBeeswaxClient {
     pub async fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.post(&url).json(&create).build()?;
-        let response = self.client.execute(request).await?;
+        let response: Response = self.client.execute(request).await?;
+
+        if !response.status().is_success() {
+            dbg!(response.text().await);
+            panic!("nope");
+        }
         let response: ResponseId = response.json().await?;
         if response.success {
             Ok(create.clone().into_resource(response.payload.id))
@@ -64,13 +69,14 @@ impl AsyncBeeswaxClient {
     pub async fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.put(&url).json(&resource).build()?;
-        let response = self.client.execute(request).await?;
-        let response: ResponseId = response.json().await?;
-        if response.success {
-            Ok(resource)
-        } else {
-            panic!("non-successful")
+        let response: Response = self.client.execute(request).await?;
+
+        if !response.status().is_success() {
+            dbg!(response.text().await);
+            panic!("nope");
         }
+
+        Ok(resource)
     }
 
     /// Delete a given resource
@@ -78,11 +84,12 @@ impl AsyncBeeswaxClient {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let request = self.client.delete(&url).json(&delete).build()?;
         let response = self.client.execute(request).await?;
-        let response: ResponseId = response.json().await?;
-        if response.success {
-            Ok(())
-        } else {
-            panic!("non-successful")
+
+        if !response.status().is_success() {
+            dbg!(response.text().await);
+            panic!("nope");
         }
+
+        Ok(())
     }
 }

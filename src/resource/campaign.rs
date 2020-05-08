@@ -2,7 +2,7 @@
 //! belong to a single Advertisers.
 
 use crate::resource::{
-    common::{BudgetType, FrequencyCap, FrequencyCapType, RevenueType},
+    common::{BudgetType, Continent, Currency, FrequencyCap, FrequencyCapType, RevenueType},
     Create, Delete, Read, Resource,
 };
 use serde::{Deserialize, Serialize};
@@ -65,11 +65,11 @@ struct Campaign {
 
     /// Continents in which the Campaign is eligible to serve. Inherited from the Advertiser object
     /// if left blank.
-    pub continents: Option<Vec<String>>,
+    pub continents: Option<Vec<Continent>>,
 
     /// Currency in which all Line Items under this Campaign will bid. Cannot be changed once set.
     /// If a default is set at the Advertiser level, it will be inherited here.
-    pub currency: Option<String>,
+    pub currency: Option<Currency>,
 
     /// An alternative id to lookup the Campaign, if desired
     pub alternative_id: Option<String>,
@@ -176,11 +176,11 @@ pub struct CreateCampaign {
 
     /// Continents in which the Campaign is eligible to serve. Inherited from the Advertiser object
     /// if left blank.
-    pub continents: Option<Vec<String>>,
+    pub continents: Option<Vec<Continent>>,
 
     /// Currency in which all Line Items under this Campaign will bid. Cannot be changed once set.
     /// If a default is set at the Advertiser level, it will be inherited here.
-    pub currency: Option<String>,
+    pub currency: Option<Currency>,
 
     /// An alternative id to lookup the Campaign, if desired
     pub alternative_id: Option<String>,

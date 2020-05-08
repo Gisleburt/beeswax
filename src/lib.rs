@@ -23,7 +23,7 @@
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {
-//! use beeswax::{AsyncBeeswaxClient, resource::Authenticate};
+//! use beeswax::{AsyncBeeswaxClient, resource::authenticate::Authenticate};
 //!
 //! let user = std::env::var("BEESWAX_USER")?;
 //! let password = std::env::var("BEESWAX_PASSWORD")?;
@@ -42,8 +42,8 @@
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {
-//! # use beeswax::{AsyncBeeswaxClient, resource::Authenticate};
-//! use beeswax::resource::{CreateAdvertiser, ReadAdvertiser};
+//! # use beeswax::{AsyncBeeswaxClient, resource::authenticate::Authenticate};
+//! use beeswax::resource::advertiser::{CreateAdvertiser, ReadAdvertiser};
 //! #
 //! # let user = std::env::var("BEESWAX_USER")?;
 //! # let password = std::env::var("BEESWAX_PASSWORD")?;

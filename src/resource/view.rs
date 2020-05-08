@@ -24,7 +24,7 @@ impl Deref for View {
 
 #[derive(Clone, Serialize)]
 pub struct ReadView {
-    view_name: ViewName,
+    pub view_name: ViewName,
 }
 
 impl Read<View> for ReadView {}

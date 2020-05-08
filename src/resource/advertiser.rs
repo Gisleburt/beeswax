@@ -2,7 +2,10 @@
 //! entity paying the bills for the ads that run. See: Advertisers, Campaigns, Line_Items,
 //! Creatives.
 
-use crate::resource::{common::ConversionMethod, Create, Delete, Read, Resource};
+use crate::resource::{
+    common::{Continent, ConversionMethod, Currency},
+    Create, Delete, Read, Resource,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -30,9 +33,9 @@ pub struct Advertiser {
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
     /// at the Campaign level.
-    pub default_continent: Option<String>,
+    pub default_continent: Option<Continent>,
     /// Currency to use as default for all Campaigns under this Advertiser
-    pub default_currency: Option<String>,
+    pub default_currency: Option<Currency>,
     /// URL of a thumbnail image to use when a Creative does not have one. This is useful since some
     /// exchanges may not allow a Creative to run without a thumbnail.
     pub default_creative_thumbnail_url: Option<String>,
@@ -95,9 +98,9 @@ pub struct CreateAdvertiser {
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
     /// at the Campaign level.
-    pub default_continent: Option<String>,
+    pub default_continent: Option<Continent>,
     /// Currency to use as default for all Campaigns under this Advertiser
-    pub default_currency: Option<String>,
+    pub default_currency: Option<Currency>,
     /// URL of a thumbnail image to use when a Creative does not have one. This is useful since some
     /// exchanges may not allow a Creative to run without a thumbnail.
     pub default_creative_thumbnail_url: Option<String>,
