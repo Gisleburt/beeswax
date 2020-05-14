@@ -28,7 +28,7 @@ impl Default for CreativeType {
     }
 }
 
-#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr, PartialEq)]
 #[repr(u8)]
 pub enum BudgetType {
     Spend = 0,
@@ -51,7 +51,7 @@ pub struct FrequencyCap {
     pub impressions: Option<u64>,
 }
 
-#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr, PartialEq)]
 #[repr(u8)]
 /// Beeswax supports flexible ways to use inbound auction data to frequency cap. Which method is
 /// used depends on the frequency_cap_type field defined at the Campaign and Line Item level.

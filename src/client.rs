@@ -2,6 +2,8 @@ use crate::resource::{
     authenticate::Authenticate, Create, Delete, Read, Resource, ResponseId, ResponseResource,
 };
 use reqwest::{Client, ClientBuilder, Response};
+use serde_json;
+
 
 use crate::Result;
 
@@ -50,10 +52,11 @@ impl AsyncBeeswaxClient {
     /// Create a given resource
     pub async fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
-        let request = self.client.post(&url).json(&create).build()?;
+        let request = self.client.post(&url).json(&create.clone()).build()?;
         let response: Response = self.client.execute(request).await?;
 
         if !response.status().is_success() {
+            dbg!(serde_json::to_string(create));
             dbg!(response.text().await);
             panic!("nope");
         }

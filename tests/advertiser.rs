@@ -6,23 +6,24 @@ use beeswax::resource::{
     advertiser::{CreateAdvertiser, ReadAdvertiser},
     common::{Continent, ConversionMethod, Currency},
 };
+use helper::{get_beeswax_client, random_string};
 
 #[tokio::test]
 async fn test_advertiser() {
-    let beeswax_client = helper::get_beeswax_client().await.unwrap();
+    let beeswax_client = get_beeswax_client().await.unwrap();
     let create_advertiser = CreateAdvertiser {
-        advertiser_name: "Advertiser Name".to_string(),
+        advertiser_name: random_string("Advertiser Name"),
         attributes: None,
-        conversion_method_id: Some(ConversionMethod::LastClick),
+        conversion_method_id: ConversionMethod::LastClick,
         default_click_url: Some("https://example.com".to_string()),
         default_continent: Some(Continent::NorthAmerica),
         default_currency: Some(Currency::UnitedStatesDollar),
         default_creative_thumbnail_url: Some("https://example.com/thumbnail.jpg".to_string()),
         default_campaign_preset_id: None,
         default_line_item_preset_id: None,
-        alternative_id: Some("Alternative Id".to_string()),
-        notes: Some("Notes".to_string()),
-        active: Some(false),
+        alternative_id: Some(random_string("Alternative Id")),
+        notes: Some(random_string("Notes")),
+        active: false,
     };
     let advertiser = beeswax_client.create(&create_advertiser).await.unwrap();
 
@@ -76,15 +77,15 @@ async fn test_advertiser() {
     assert_eq!(read_advertiser.notes, advertiser.notes);
     assert_eq!(read_advertiser.active, advertiser.active);
 
-    read_advertiser.advertiser_name = "Updated Advertiser Name".to_string();
+    read_advertiser.advertiser_name = random_string("Updated Advertiser Name");
     read_advertiser.default_click_url = Some("https://example.com/updated".to_string());
     read_advertiser.default_continent = Some(Continent::NorthAmerica);
     read_advertiser.default_currency = Some(Currency::UnitedStatesDollar);
     read_advertiser.default_creative_thumbnail_url =
         Some("https://example.com/updated/thumbnail.jpg".to_string());
-    read_advertiser.alternative_id = Some("Updated Alternative Id".to_string());
+    read_advertiser.alternative_id = Some(random_string("Updated Alternative Id"));
     read_advertiser.notes = Some("Updated Notes".to_string());
-    read_advertiser.active = Some(true);
+    read_advertiser.active = true;
 
     beeswax_client.update(&read_advertiser).await.unwrap();
 

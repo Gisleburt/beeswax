@@ -8,7 +8,7 @@ use crate::resource::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
-struct Campaign {
+pub struct Campaign {
     /// Unique ID of the campaign
     pub campaign_id: u64,
 
@@ -19,7 +19,7 @@ struct Campaign {
     pub campaign_name: String,
 
     /// Maximum amount to spend on this Campaign
-    pub campaign_bud: f64,
+    pub campaign_budget: f64,
 
     /// Maximum amount to spend or deliver in a day, Cannot exceed campaign_budget or be so low as
     /// to prevent campaign_budget from being reached over the length of the campaign. Cannot be
@@ -80,7 +80,6 @@ struct Campaign {
     /// Is it active?
     pub active: bool,
 
-    pub campaign_budget: u64,
     pub campaign_spend: u64,
 
     // ToDo: Unknown Type
@@ -88,7 +87,8 @@ struct Campaign {
     // ToDo: Unknown Type
     // pub default_targeting: Unknown Type,
     pub push_status: u64,
-    pub push_update: bool,
+    // ToDo: The docs are wrong about this type
+    pub push_update: u64,
     pub account_id: u64,
     pub create_date: Option<String>,
     pub update_date: Option<String>,
@@ -96,27 +96,27 @@ struct Campaign {
 }
 
 impl Resource for Campaign {
-    const NAME: &'static str = "resource";
+    const NAME: &'static str = "campaign";
 }
 
 #[derive(Clone, Debug, Default, Serialize)]
 pub struct ReadCampaign {
     /// Unique ID of the campaign
-    campaign_id: Option<u64>,
+    pub campaign_id: Option<u64>,
     /// Id of the Advertiser the campaign belongs too
-    advertiser_id: Option<u64>,
+    pub advertiser_id: Option<u64>,
     /// Name of the campaign, e.g. "Winter lead generation"
-    campaign_name: Option<String>,
+    pub campaign_name: Option<String>,
     /// ID of the Bid Modifier associated with this Campaign
-    bid_modifier_id: Option<u64>,
+    pub bid_modifier_id: Option<u64>,
     /// ID of the Delivery Modifier associated with this Campaign
-    delivery_modifier_id: Option<u64>,
+    pub delivery_modifier_id: Option<u64>,
     /// An alternative id to lookup the campaign, if desired
-    alternative_id: Option<String>,
+    pub alternative_id: Option<String>,
     /// Is it active?
-    active: Option<bool>,
-    create_date: Option<String>,
-    update_date: Option<String>,
+    pub active: Option<bool>,
+    pub create_date: Option<String>,
+    pub update_date: Option<String>,
 }
 
 impl Read<Campaign> for ReadCampaign {}
@@ -130,7 +130,7 @@ pub struct CreateCampaign {
     pub campaign_name: String,
 
     /// Maximum amount to spend on this Campaign
-    pub campaign_bud: f64,
+    pub campaign_budget: f64,
 
     /// Maximum amount to spend or deliver in a day, Cannot exceed campaign_budget or be so low as
     /// to prevent campaign_budget from being reached over the length of the campaign. Cannot be
@@ -198,7 +198,7 @@ impl Create<Campaign> for CreateCampaign {
             campaign_id,
             advertiser_id: self.advertiser_id,
             campaign_name: self.campaign_name,
-            campaign_bud: self.campaign_bud,
+            campaign_budget: self.campaign_budget,
             daily_budget: self.daily_budget,
             budget_type: self.budget_type,
             revenue_type: self.revenue_type,

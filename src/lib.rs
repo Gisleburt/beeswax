@@ -60,7 +60,7 @@
 //!
 //! let mut created_advertiser = beeswax_api.create(&create_advertiser).await?;
 //!
-//! created_advertiser.active = Some(true);
+//! created_advertiser.active = true;
 //!
 //! let updated_advertiser = beeswax_api.update(&created_advertiser).await?;
 //!

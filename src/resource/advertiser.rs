@@ -28,7 +28,7 @@ pub struct Advertiser {
     /// attribution method as found in the conversion_atrtibution_methods view. At this time only
     /// method 1 (last click) is supported. Once a conversion method is chosen, it cannot be
     /// changed.
-    pub conversion_method_id: Option<ConversionMethod>,
+    pub conversion_method_id: ConversionMethod,
     /// Click URL to use by default for objects created under this advertiser
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
@@ -50,7 +50,7 @@ pub struct Advertiser {
     /// Any notes desired, less than 255 chars
     pub notes: Option<String>,
     /// Is the advertier active
-    pub active: Option<bool>,
+    pub active: bool,
     // Undocumented
     pub account_id: Option<u64>,
     pub create_date: Option<String>,
@@ -93,7 +93,7 @@ pub struct CreateAdvertiser {
     /// attribution method as found in the conversion_atrtibution_methods view. At this time only
     /// method 1 (last click) is supported. Once a conversion method is chosen, it cannot be
     /// changed.
-    pub conversion_method_id: Option<ConversionMethod>,
+    pub conversion_method_id: ConversionMethod,
     /// Click URL to use by default for objects created under this advertiser
     pub default_click_url: Option<String>,
     /// Continent in which this Advertiser's Campaigns should be eligible to serve. Can be changed
@@ -115,7 +115,7 @@ pub struct CreateAdvertiser {
     /// Any notes desired, less than 255 chars
     pub notes: Option<String>,
     /// Is the advertier active
-    pub active: Option<bool>,
+    pub active: bool,
 }
 
 impl Create<Advertiser> for CreateAdvertiser {
