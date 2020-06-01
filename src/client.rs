@@ -4,7 +4,6 @@ use crate::resource::{
 use reqwest::{Client, ClientBuilder, Response};
 use serde_json;
 
-
 use crate::Result;
 
 /// Creates the BeeswaxApi client. This type is instantiated from the BeeswaxApi struct.

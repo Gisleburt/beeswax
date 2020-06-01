@@ -80,12 +80,18 @@ async fn test_campaign() {
     assert_eq!(read_campaign.revenue_type, campaign.revenue_type);
     assert_eq!(read_campaign.revenue_amount, campaign.revenue_amount);
     assert_eq!(read_campaign.bid_modifier_id, campaign.bid_modifier_id);
-    assert_eq!(read_campaign.delivery_modifier_id, campaign.delivery_modifier_id);
+    assert_eq!(
+        read_campaign.delivery_modifier_id,
+        campaign.delivery_modifier_id
+    );
     assert_eq!(read_campaign.max_bid, campaign.max_bid);
     // assert_eq!(read_campaign.start_date, campaign.start_date);
     // assert_eq!(read_campaign.end_date, campaign.end_date);
     assert_eq!(read_campaign.frequency_cap, campaign.frequency_cap);
-    assert_eq!(read_campaign.frequency_cap_type, campaign.frequency_cap_type);
+    assert_eq!(
+        read_campaign.frequency_cap_type,
+        campaign.frequency_cap_type
+    );
     // assert_eq!(read_campaign.continents, Some(vec![advertiser.default_continent.unwrap()]));
     // assert_eq!(read_campaign.currency, advertiser.default_currency);
     assert_eq!(read_campaign.alternative_id, campaign.alternative_id);
@@ -108,6 +114,8 @@ async fn test_campaign() {
         .pop()
         .unwrap();
 
-    assert_eq!(updated_advertiser.campaign_name, read_campaign.campaign_name);
-
+    assert_eq!(
+        updated_advertiser.campaign_name,
+        read_campaign.campaign_name
+    );
 }
