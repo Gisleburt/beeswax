@@ -76,10 +76,10 @@
 //! # }
 //! ```
 
-mod client;
+pub mod client;
 pub mod resource;
 
-pub use client::{AsyncBeeswaxClient, AsyncBeeswaxClientBuilder};
+pub use client::async_client::AsyncBeeswaxClient;
 
 use std::error::Error;
 type Result<T> = std::result::Result<T, Box<dyn Error>>;

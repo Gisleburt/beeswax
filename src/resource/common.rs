@@ -14,7 +14,7 @@ impl Default for ConversionMethod {
     }
 }
 
-#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(u8)]
 pub enum CreativeType {
     Banner = 0,

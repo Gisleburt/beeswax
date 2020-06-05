@@ -62,12 +62,20 @@ pub struct Advertiser {
 impl Advertiser {
     /// Create a builder for CreateAdvertiser
     /// ```
-    /// use beeswax::resource::advertiser::Advertiser;
-    /// let create_advertise = Advertiser::create_builder()
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Advertiser;
+    ///
+    /// let create_advertiser = Advertiser::create_builder()
     ///     .advertiser_name("Some name")
     ///     .build();
     ///
-    /// // let advertiser = beeswax_client.create(&create_advertiser).await?;
+    /// let advertiser = beeswax_client.create(&create_advertiser).await?;
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn create_builder(
     ) -> CreateAdvertiserBuilder<((), (), (), (), (), (), (), (), (), (), (), ())> {
@@ -76,15 +84,44 @@ impl Advertiser {
 
     /// Create a builder for ReadAdvertiser
     /// ```
-    /// use beeswax::resource::advertiser::Advertiser;
-    /// let read_advertise = Advertiser::read_builder()
-    ///     .advertiser_name("Some name")
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Advertiser;
+    ///
+    /// let read_advertiser = Advertiser::read_builder()
+    ///     .advertiser_name("Some name".to_string())
     ///     .build();
     ///
-    /// // let advertisers = beeswax_client.read(&read_advertiser).await?;
+    /// let advertisers = beeswax_client.read(&read_advertiser).await?;
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn read_builder() -> ReadAdvertiserBuilder<((), (), (), (), ())> {
         ReadAdvertiser::builder()
+    }
+
+    /// Create a builder for DeleteAdvertiser
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Advertiser;
+    ///
+    /// let delete_advertiser = Advertiser::delete_builder()
+    ///     .advertiser_id(10)
+    ///     .build();
+    ///
+    /// beeswax_client.delete(&delete_advertiser).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_builder() -> DeleteAdvertiserBuilder<((),)> {
+        DeleteAdvertiser::builder()
     }
 }
 
@@ -95,18 +132,29 @@ impl Resource for Advertiser {
 #[derive(Clone, Debug, Default, Serialize, TypedBuilder)]
 pub struct ReadAdvertiser {
     /// Unique ID of the advertiser
-    #[builder(default)]
+    #[builder(default, setter(into))]
     pub advertiser_id: Option<u64>,
     /// An alternative id to lookup the object, if desired
-    #[builder(default)]
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
     /// Unique name for the advertiser. Supports %LIKE% syntax
-    #[builder(default)]
+    #[builder(default, setter(into))]
     pub advertiser_name: Option<String>,
-    #[builder(default)]
+    #[builder(default, setter(into))]
     pub create_date: Option<String>,
-    #[builder(default)]
+    #[builder(default, setter(into))]
     pub update_date: Option<String>,
+}
+
+impl PartialEq<Advertiser> for ReadAdvertiser {
+    fn eq(&self, other: &Advertiser) -> bool {
+        (self.advertiser_id.is_none() || self.advertiser_id == Some(other.advertiser_id))
+            && (self.alternative_id.is_none() || self.alternative_id == other.alternative_id)
+            && (self.advertiser_name.is_none()
+                || self.advertiser_name.as_ref() == Some(&other.advertiser_name))
+            && (self.create_date.is_none() || self.create_date == other.create_date)
+            && (self.update_date.is_none() || self.update_date == other.update_date)
+    }
 }
 
 impl Read<Advertiser> for ReadAdvertiser {}
@@ -186,8 +234,8 @@ impl Create<Advertiser> for CreateAdvertiser {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
-struct DeleteAdvertiser {
+#[derive(Clone, Debug, Serialize, TypedBuilder)]
+pub struct DeleteAdvertiser {
     advertiser_id: u64,
 }
 

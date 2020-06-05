@@ -8,8 +8,8 @@ use crate::resource::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
-struct LineItem {
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LineItem {
     line_item_id: u64,
     /// Must be a valid and active Campaign
     campaign_id: u64,
@@ -77,8 +77,8 @@ struct LineItem {
     push_status: u64,
     push_update: bool,
     account_id: u64,
-    create_date: String,
-    update_date: String,
+    create_date: Option<String>,
+    update_date: Option<String>,
     buzz_key: String,
 }
 
@@ -87,7 +87,7 @@ impl Resource for LineItem {
 }
 
 #[derive(Clone, Default, Debug, Serialize)]
-struct ReadLineItem {
+pub struct ReadLineItem {
     /// Unique ID of the Line Item
     line_item_id: Option<u64>,
     /// Must be a valid and active Campaign
@@ -115,8 +115,29 @@ struct ReadLineItem {
 
 impl Read<LineItem> for ReadLineItem {}
 
+impl PartialEq<LineItem> for ReadLineItem {
+    fn eq(&self, other: &LineItem) -> bool {
+        (self.line_item_id.is_none() || self.line_item_id == Some(other.line_item_id))
+            && (self.campaign_id.is_none() || self.campaign_id == Some(other.campaign_id))
+            && (self.advertiser_id.is_none() || self.advertiser_id == Some(other.advertiser_id))
+            && (self.line_item_type_id.is_none()
+                || self.line_item_type_id == Some(other.line_item_type_id))
+            && (self.line_item_name.is_none()
+                || self.line_item_name.as_ref() == Some(&other.line_item_name))
+            && (self.bid_modifier_id.is_none() || self.bid_modifier_id == other.bid_modifier_id)
+            && (self.delivery_modifier_id.is_none()
+                || self.delivery_modifier_id == other.delivery_modifier_id)
+            && (self.start_date.is_none() || self.start_date.as_ref() == Some(&other.start_date))
+            && (self.end_date.is_none() || self.end_date == other.end_date)
+            && (self.alternative_id.is_none() || self.alternative_id == other.alternative_id)
+            && (self.active.is_none() || self.active == Some(other.active))
+            && (self.create_date.is_none() || self.create_date == other.create_date)
+            && (self.update_date.is_none() || self.update_date == other.update_date)
+    }
+}
+
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
-struct CreateLineItem {
+pub struct CreateLineItem {
     /// Must be a valid and active Campaign
     pub campaign_id: u64,
     /// Must be active
@@ -208,7 +229,7 @@ impl Create<LineItem> for CreateLineItem {
 }
 
 #[derive(Clone, Debug, Serialize)]
-struct DeleteLineItem {
+pub struct DeleteLineItem {
     creative_id: u64,
 }
 

@@ -119,6 +119,22 @@ pub struct ReadCampaign {
     pub update_date: Option<String>,
 }
 
+impl PartialEq<Campaign> for ReadCampaign {
+    fn eq(&self, other: &Campaign) -> bool {
+        (self.campaign_id.is_none() || self.campaign_id == Some(other.campaign_id))
+            && (self.advertiser_id.is_none() || self.advertiser_id == Some(other.advertiser_id))
+            && (self.campaign_name.is_none()
+                || self.campaign_name.as_ref() == Some(&other.campaign_name))
+            && (self.bid_modifier_id.is_none() || self.bid_modifier_id == other.bid_modifier_id)
+            && (self.delivery_modifier_id.is_none()
+                || self.delivery_modifier_id == other.delivery_modifier_id)
+            && (self.alternative_id.is_none() || self.alternative_id == other.alternative_id)
+            && (self.active.is_none() || self.active == Some(other.active))
+            && (self.create_date.is_none() || self.create_date == other.create_date)
+            && (self.update_date.is_none() || self.update_date == other.update_date)
+    }
+}
+
 impl Read<Campaign> for ReadCampaign {}
 
 #[derive(Clone, Debug, Default, Serialize)]

@@ -4,8 +4,8 @@
 use crate::resource::{Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
-struct CreativeLineItem {
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CreativeLineItem {
     cli_id: u64,
     /// Unique ID of the Creative to be associated. Must bethe same type as the Line Item.
     creative_id: u64,
@@ -38,7 +38,7 @@ impl Resource for CreativeLineItem {
 }
 
 #[derive(Clone, Default, Serialize)]
-struct ReadCreativeLineItem {
+pub struct ReadCreativeLineItem {
     /// Unique ID of the Creative Line Item association
     cli_id: Option<u64>,
     /// Unique ID of the Creative.
@@ -55,8 +55,19 @@ struct ReadCreativeLineItem {
 
 impl Read<CreativeLineItem> for CreativeLineItem {}
 
+impl PartialEq<CreativeLineItem> for ReadCreativeLineItem {
+    fn eq(&self, other: &CreativeLineItem) -> bool {
+        (self.cli_id.is_none() || self.cli_id == Some(other.cli_id))
+            && (self.creative_id.is_none() || self.creative_id == Some(other.creative_id))
+            && (self.line_item_id.is_none() || self.line_item_id == Some(other.line_item_id))
+            && (self.start_date.is_none() || self.start_date == other.start_date)
+            && (self.end_date.is_none() || self.end_date == other.end_date)
+            && (self.active.is_none() || self.active == Some(other.active))
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
-struct CreateCreativeLineItem {
+pub struct CreateCreativeLineItem {
     /// Unique ID of the Creative to be associated. Must bethe same type as the Line Item.
     creative_id: u64,
     /// Unique D of the Line Item to be associated. Must be the same type as the Creative.
@@ -93,7 +104,7 @@ impl Create<CreativeLineItem> for CreateCreativeLineItem {
 }
 
 #[derive(Clone, Debug, Serialize)]
-struct DeleteCreativeLineItem {
+pub struct DeleteCreativeLineItem {
     cli_id: u64,
 }
 

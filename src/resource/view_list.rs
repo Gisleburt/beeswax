@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 use std::ops::Deref;
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct ViewList(JsonValue);
 
 impl Resource for ViewList {
@@ -30,3 +30,9 @@ pub struct ReadViewList {
 }
 
 impl Read<ViewList> for ReadViewList {}
+
+impl PartialEq<ViewList> for ReadViewList {
+    fn eq(&self, other: &ViewList) -> bool {
+        unreachable!("ViewList is of unknown shape and should not get compared to ReadViewList")
+    }
+}

@@ -143,7 +143,7 @@ pub struct ReadCreative {
     /// Name of the Creative, e.g. "Blue Banner Ad"
     pub creative_name: Option<String>,
     /// ID for the type of creative. 0=banner, 1=video, 2=native, etc.
-    pub creative_type: Option<u64>,
+    pub creative_type: Option<CreativeType>,
     /// The ID of the Creative Template to use for this creative. Must be a valid and active Creative Template that either belongs to this Account, OR is marked as "global".
     pub creative_template_id: Option<u64>,
     /// An alternative id to lookup the creative, if desired
@@ -155,6 +155,22 @@ pub struct ReadCreative {
 }
 
 impl Read<Creative> for ReadCreative {}
+
+impl PartialEq<Creative> for ReadCreative {
+    fn eq(&self, other: &Creative) -> bool {
+        (self.creative_id.is_none() || self.creative_id == Some(other.creative_id))
+            && (self.advertiser_id.is_none() || self.advertiser_id == Some(other.advertiser_id))
+            && (self.creative_name.is_none()
+                || self.creative_name.as_ref() == Some(&other.creative_name))
+            && (self.creative_type.is_none() || self.creative_type == Some(other.creative_type))
+            && (self.creative_template_id.is_none()
+                || self.creative_template_id == Some(other.creative_template_id))
+            && (self.alternative_id.is_none() || self.alternative_id == other.alternative_id)
+            && (self.active.is_none() || self.active == other.active)
+            && (self.create_date.is_none() || self.create_date == other.create_date)
+            && (self.update_date.is_none() || self.update_date == other.update_date)
+    }
+}
 
 /// Create a search criteria for creatives for the given advertiser
 impl From<Advertiser> for ReadCreative {
