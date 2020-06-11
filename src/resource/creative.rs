@@ -8,6 +8,7 @@ use crate::resource::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
+use typed_builder::TypedBuilder;
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Creative {
@@ -130,27 +131,103 @@ pub struct Creative {
     pub buzz_key: Option<String>,
 }
 
+impl Creative {
+    /// Create a builder for CreateCreative
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Creative;
+    ///
+    /// let create_creative = Creative::create_builder()
+    ///     .creative_name("Some name")
+    ///     .advertiser_id(1)
+    ///     .build();
+    ///
+    /// let creative = beeswax_client.create(&create_creative).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn create_builder(
+    ) -> CreateCreativeBuilder<((), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), ())> {
+        CreateCreative::builder()
+    }
+
+    /// Create a builder for ReadCreative
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Creative;
+    ///
+    /// let read_creative = Creative::read_builder()
+    ///     .creative_name("Some name".to_string())
+    ///     .build();
+    ///
+    /// let creatives = beeswax_client.read(&read_creative).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn read_builder() -> ReadCreativeBuilder<((), (), (), (), (), (), (), (), ())> {
+        ReadCreative::builder()
+    }
+
+    /// Create a builder for DeleteCreative
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Creative;
+    ///
+    /// let delete_creative = Creative::delete_builder()
+    ///     .creative_id(10)
+    ///     .build();
+    ///
+    /// beeswax_client.delete(&delete_creative).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_builder() -> DeleteCreativeBuilder<((),)> {
+        DeleteCreative::builder()
+    }
+}
+
 impl Resource for Creative {
     const NAME: &'static str = "creative";
 }
 
-#[derive(Clone, Default, Serialize)]
+#[derive(Clone, Default, Serialize, TypedBuilder)]
 pub struct ReadCreative {
     /// Unique ID of the Creative
+    #[builder(default, setter(into))]
     pub creative_id: Option<u64>,
     /// Must belong to the same account as the Advertiser
+    #[builder(default, setter(into))]
     pub advertiser_id: Option<u64>,
     /// Name of the Creative, e.g. "Blue Banner Ad"
+    #[builder(default, setter(into))]
     pub creative_name: Option<String>,
     /// ID for the type of creative. 0=banner, 1=video, 2=native, etc.
+    #[builder(default, setter(into))]
     pub creative_type: Option<CreativeType>,
     /// The ID of the Creative Template to use for this creative. Must be a valid and active Creative Template that either belongs to this Account, OR is marked as "global".
+    #[builder(default, setter(into))]
     pub creative_template_id: Option<u64>,
     /// An alternative id to lookup the creative, if desired
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
     /// Is the Creative active?
+    #[builder(default, setter(into))]
     pub active: Option<bool>,
+    #[builder(default, setter(into))]
     pub create_date: Option<String>,
+    #[builder(default, setter(into))]
     pub update_date: Option<String>,
 }
 
@@ -182,104 +259,129 @@ impl From<Advertiser> for ReadCreative {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, TypedBuilder)]
 pub struct CreateCreative {
     /// Must belong to the same account as the Advertiser and be active
     pub advertiser_id: u64,
 
     /// Name of the Creative, e.g. "Blue Banner Ad"
+    #[builder(setter(into))]
     pub creative_name: String,
 
     /// The type of creative. 0=banner, 1=video, 2=native
+    #[builder(default, setter(into))]
     pub creative_type: CreativeType,
 
     /// Width in pixels. Use the creative_sizes view to see all acceptable width and height
     /// combinations.
+    #[builder(default, setter(into))]
     pub width: Option<u64>,
 
     /// Height in pixels. Use the creative_sizes view to see all acceptable width and height
     /// combinations.
+    #[builder(default, setter(into))]
     pub height: Option<u64>,
 
     /// Is the creative sizeless, meaning it can match any size placement that is an interstitial.
     /// Native creatives should also be marked as sizeless.
+    #[builder(default, setter(into))]
     pub sizeless: Option<bool>,
 
     /// Is the creative intended to serve in a secure (HTTPS) environment.
+    #[builder(default, setter(into))]
     pub secure: bool,
 
     /// URL the ad should click or tap to, must be a valid URL. This field is required when using a
     /// Creative Template that is not a tag (e.g. an image or video)
+    #[builder(default, setter(into))]
     pub click_url: Option<String>,
 
     /// DEPRECATED, use primary_asset and secondary_asset fields instead.
     // pub creative_assets: Option<Vec<u64>>,
 
     /// ID of the creative_asset to use in the Creative, for example the ID of an Image or Video.
+    #[builder(default, setter(into))]
     pub primary_asset: Option<u64>,
 
     /// ID of a secondary creative_asset to use in the Creative. Most commonly used for the
+    #[builder(default, setter(into))]
     /// companion asset within a Video Creative
     pub secondary_asset: Option<u64>,
 
     /// For Native creatives, the NativeOffer to be used for the Creative content
+    #[builder(default, setter(into))]
     pub native_offer: Option<u64>,
 
     /// A JSON representation of the fields required by the Creative Template, validated against the
     /// Creative Template. Schema of json varies.
+    #[builder(default, setter(into))]
     pub creative_content: Option<JsonValue>,
 
     /// For tag creatives the tag can be placed in this field and on save the creative_rule_key will
     /// be applied to insert relevant macros. This is recommended vs completing the creative_content
     /// field directly.
+    #[builder(default, setter(into))]
     pub creative_content_tag: Option<String>,
 
     /// The ID of the Creative Template to use for this creative. Must be a valid and active
     /// Creative Template that either belongs to this Account, OR is marked as "global".
+    #[builder(default, setter(into))]
     pub creative_template_id: u64,
 
     /// DEPRECATED
-    pub creative_rule_id: Option<u64>,
+    // pub creative_rule_id: Option<u64>,
 
     /// The key corresponding to the creative_rule to apply to the creative_content_tag field. The
     /// rule will insert click and timestamp macros. You can use auto_detect for easiest
     /// implementation.
+    #[builder(default, setter(into))]
     pub creative_rule_key: Option<String>,
 
     /// Creative Attributes JSON.
+    #[builder(default, setter(into))]
     pub attributes: Option<JsonValue>,
 
     /// List of URLs to be added to the Creative as pixels
+    #[builder(default, setter(into))]
     pub pixels: Option<Vec<String>>,
 
     /// List of VAST tracking events and associated URLs to allow third party tracking of video
     /// events
+    #[builder(default, setter(into))]
     pub events: Option<JsonValue>,
 
     /// List of objects to track VAST video progress
+    #[builder(default, setter(into))]
     pub progress_events: Option<JsonValue>,
 
     /// List of CreativeAddOn IDs to add to the Creative
+    #[builder(default, setter(into))]
     pub creative_addons: Option<Vec<u64>>,
 
     /// URL to an image thumbnail for the creative. This field will be automatically set if you
     /// associate the creative with a Creative Asset that has a valid thumbnail but must be updated
     /// manually when using a tag-based Creative. Thumbnail is required by some exchanges to serve.
+    #[builder(default, setter(into))]
     pub creative_thumbnail_url: Option<String>,
 
     /// Start date for the creative, optional
+    #[builder(default, setter(into))]
     pub start_date: Option<String>,
 
     /// End date for the creative, optional
+    #[builder(default, setter(into))]
     pub end_date: Option<String>,
 
     /// An alternative id to lookup the Creative, if desired
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
 
     /// Notes about the Creative, up to 255 chars
+    #[builder(default, setter(into))]
     pub notes: Option<String>,
 
     /// Is the Creative active?
+    #[builder(default, setter(into))]
     pub active: Option<bool>,
 }
 
@@ -302,7 +404,7 @@ impl Create<Creative> for CreateCreative {
             creative_content: self.creative_content,
             creative_content_tag: self.creative_content_tag,
             creative_template_id: self.creative_template_id,
-            creative_rule_id: self.creative_rule_id,
+            // creative_rule_id: self.creative_rule_id,
             creative_rule_key: self.creative_rule_key,
             attributes: self.attributes,
             pixels: self.pixels,
@@ -320,8 +422,8 @@ impl Create<Creative> for CreateCreative {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
-struct DeleteCreative {
+#[derive(Clone, Debug, Serialize, TypedBuilder)]
+pub struct DeleteCreative {
     creative_id: u64,
 }
 
