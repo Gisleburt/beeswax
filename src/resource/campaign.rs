@@ -6,6 +6,7 @@ use crate::resource::{
     Create, Delete, Read, Resource,
 };
 use serde::{Deserialize, Serialize};
+use typed_builder::TypedBuilder;
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct Campaign {
@@ -95,27 +96,122 @@ pub struct Campaign {
     pub buzz_key: String,
 }
 
+impl Campaign {
+    /// Create a builder for CreateCampaign
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Campaign;
+    ///
+    /// let create_campaign = Campaign::create_builder()
+    ///     .campaign_name("Some name")
+    ///     .advertiser_id(1)
+    ///     .build();
+    ///
+    /// let campaign = beeswax_client.create(&create_campaign).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn create_builder() -> CreateCampaignBuilder<(
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+    )> {
+        CreateCampaign::builder()
+    }
+
+    /// Create a builder for ReadCampaign
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Campaign;
+    ///
+    /// let read_campaign = Campaign::read_builder()
+    ///     .campaign_name("Some name".to_string())
+    ///     .build();
+    ///
+    /// let campaigns = beeswax_client.read(&read_campaign).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn read_builder() -> ReadCampaignBuilder<((), (), (), (), (), (), (), (), ())> {
+        ReadCampaign::builder()
+    }
+
+    /// Create a builder for DeleteCampaign
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::Campaign;
+    ///
+    /// let delete_campaign = Campaign::delete_builder()
+    ///     .campaign_id(10)
+    ///     .build();
+    ///
+    /// beeswax_client.delete(&delete_campaign).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_builder() -> DeleteCampaignBuilder<((),)> {
+        DeleteCampaign::builder()
+    }
+}
+
 impl Resource for Campaign {
     const NAME: &'static str = "campaign";
 }
 
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize, TypedBuilder)]
 pub struct ReadCampaign {
     /// Unique ID of the campaign
+    #[builder(default)]
     pub campaign_id: Option<u64>,
     /// Id of the Advertiser the campaign belongs too
+    #[builder(default, setter(into))]
     pub advertiser_id: Option<u64>,
     /// Name of the campaign, e.g. "Winter lead generation"
+    #[builder(default, setter(into))]
     pub campaign_name: Option<String>,
     /// ID of the Bid Modifier associated with this Campaign
+    #[builder(default, setter(into))]
     pub bid_modifier_id: Option<u64>,
     /// ID of the Delivery Modifier associated with this Campaign
+    #[builder(default, setter(into))]
     pub delivery_modifier_id: Option<u64>,
     /// An alternative id to lookup the campaign, if desired
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
     /// Is it active?
+    #[builder(default, setter(into))]
     pub active: Option<bool>,
+    #[builder(default, setter(into))]
     pub create_date: Option<String>,
+    #[builder(default, setter(into))]
     pub update_date: Option<String>,
 }
 
@@ -137,74 +233,92 @@ impl PartialEq<Campaign> for ReadCampaign {
 
 impl Read<Campaign> for ReadCampaign {}
 
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize, TypedBuilder)]
 pub struct CreateCampaign {
     /// Must belong to the same account as the Campaign and be active
     pub advertiser_id: u64,
 
     /// Name of the Campaign, e.g. "Winter lead generation"
+    #[builder(setter(into))]
     pub campaign_name: String,
 
     /// Maximum amount to spend on this Campaign
+    #[builder(default)]
     pub campaign_budget: f64,
 
     /// Maximum amount to spend or deliver in a day, Cannot exceed campaign_budget or be so low as
     /// to prevent campaign_budget from being reached over the length of the campaign. Cannot be
     /// lower than the daily_budget for any Line Items associated with this campaign.
+    #[builder(default, setter(into))]
     pub daily_budget: Option<f64>,
 
     /// Type of budget, 0=spend, 1=impressions, 2=spend with vendor fees
+    #[builder(default, setter(into))]
     pub budget_type: Option<BudgetType>,
 
     /// Supported revenue types: CPM, CPC, CPCV, CPI, CPA
+    #[builder(default, setter(into))]
     pub revenue_type: Option<RevenueType>,
 
     /// If a revenue_type is set, this is field is the basis of calculation. For example, if
     /// revenue_type is CPM and revenue_amount is 5.12, revenue will be calculated as a $5.12 CPM.
+    #[builder(default, setter(into))]
     pub revenue_amount: Option<f64>,
 
     // This field is deprecated. Pacing is available at the Line Item level.
     // pub pacing: Option<u64>,
     /// ID of a Bid Modifier object to associate with the Campaign. If set, max_bid must also be
     /// set.
+    #[builder(default, setter(into))]
     pub bid_modifier_id: Option<u64>,
 
     /// ID of the Delivery Modifier to associate with Line Items under this Campaign
+    #[builder(default, setter(into))]
     pub delivery_modifier_id: Option<u64>,
 
     /// Maximum bid after taking into consideration any Bid Modifiers.
+    #[builder(default, setter(into))]
     pub max_bid: Option<f64>,
 
     /// Start date of the Campaign. No Line Items associated with the Campaign can have start dates
     /// prior to this date.
+    #[builder(default, setter(into))]
     pub start_date: String,
 
     /// End date of the Campaign. No Line Items associated with the Campaign can have end dates
     /// after this date. End date must be provided in order to pace.
+    #[builder(default, setter(into))]
     pub end_date: Option<String>,
 
     /// Frequency cap JSON.
+    #[builder(default, setter(into))]
     pub frequency_cap: Option<Vec<FrequencyCap>>,
 
     /// The method of frequency capping. All Line Items must match Campaign-level if set. For
     /// definitions, see the Frequency Cap guide.
+    #[builder(default, setter(into))]
     pub frequency_cap_type: Option<FrequencyCapType>,
 
     /// Continents in which the Campaign is eligible to serve. Inherited from the Advertiser object
     /// if left blank.
+    #[builder(default, setter(into))]
     pub continents: Option<Vec<Continent>>,
 
     /// Currency in which all Line Items under this Campaign will bid. Cannot be changed once set.
     /// If a default is set at the Advertiser level, it will be inherited here.
+    #[builder(default, setter(into))]
     pub currency: Option<Currency>,
 
     /// An alternative id to lookup the Campaign, if desired
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
 
     /// Notes, up to 255 chars
+    #[builder(default, setter(into))]
     pub notes: Option<String>,
 
     /// Is it active?
+    #[builder(default)]
     pub active: bool,
 }
 
@@ -236,8 +350,9 @@ impl Create<Campaign> for CreateCampaign {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
-struct DeleteCampaign {
+#[derive(Clone, Debug, Serialize, TypedBuilder)]
+pub struct DeleteCampaign {
+    #[builder(default)]
     campaign_id: u64,
 }
 
