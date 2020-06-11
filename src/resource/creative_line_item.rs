@@ -3,6 +3,7 @@
 
 use crate::resource::{Create, Delete, Read, Resource};
 use serde::{Deserialize, Serialize};
+use typed_builder::TypedBuilder;
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreativeLineItem {
@@ -33,27 +34,105 @@ pub struct CreativeLineItem {
     buzz_key: String,
 }
 
+impl CreativeLineItem {
+    /// Create a builder for CreateCreativeLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::CreativeLineItem;
+    ///
+    /// let create_creative_line_item = CreativeLineItem::create_builder()
+    ///     .creative_id(1)
+    ///     .line_item_id(1)
+    ///     .build();
+    ///
+    /// let creative_line_item = beeswax_client.create(&create_creative_line_item).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn create_builder(
+    ) -> CreateCreativeLineItemBuilder<((), (), (), (), (), ())> {
+        CreateCreativeLineItem::builder()
+    }
+
+    /// Create a builder for ReadCreativeLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::CreativeLineItem;
+    ///
+    /// let read_creative_line_item = CreativeLineItem::read_builder()
+    ///     .creative_id(1)
+    ///     .build();
+    ///
+    /// let creative_line_items = beeswax_client.read(&read_creative_line_item).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn read_builder() -> ReadCreativeLineItemBuilder<((), (), (), (), (), ())> {
+        ReadCreativeLineItem::builder()
+    }
+
+    /// Create a builder for DeleteCreativeLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::CreativeLineItem;
+    ///
+    /// let delete_creative_line_item = CreativeLineItem::delete_builder()
+    ///     .cli_id(10)
+    ///     .build();
+    ///
+    /// beeswax_client.delete(&delete_creative_line_item).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_builder() -> DeleteCreativeLineItemBuilder<((),)> {
+        DeleteCreativeLineItem::builder()
+    }
+}
+
+
 impl Resource for CreativeLineItem {
     const NAME: &'static str = "creative_line_item";
 }
 
-#[derive(Clone, Default, Serialize)]
+#[derive(Clone, Default, Serialize, TypedBuilder)]
 pub struct ReadCreativeLineItem {
     /// Unique ID of the Creative Line Item association
+    #[builder(default, setter(into))]
     cli_id: Option<u64>,
     /// Unique ID of the Creative.
+    #[builder(default, setter(into))]
     creative_id: Option<u64>,
     /// Unique D of the Line Item.
+    #[builder(default, setter(into))]
     line_item_id: Option<u64>,
-    /// Start date for the Creative to serve within this Line Item. If either start_date or end_date is set, both values will override the Creative level dates, otherwise Creative level will be used.
+    /// Start date for the Creative to serve within this Line Item. If either start_date or end_date
+    /// is set, both values will override the Creative level dates, otherwise Creative level will be
+    /// used.
+    #[builder(default, setter(into))]
     start_date: Option<String>,
-    /// End date for the Creative to serve within this Line Item. If either start_date or end_date is set, both values will override the Creative level dates, otherwise Creative level will be used.
+    /// End date for the Creative to serve within this Line Item. If either start_date or end_date
+    /// is set, both values will override the Creative level dates, otherwise Creative level will be
+    /// used.
+    #[builder(default, setter(into))]
     end_date: Option<String>,
     /// Is it active?
+    #[builder(default)]
     active: Option<bool>,
 }
 
-impl Read<CreativeLineItem> for CreativeLineItem {}
+impl Read<CreativeLineItem> for ReadCreativeLineItem {}
 
 impl PartialEq<CreativeLineItem> for ReadCreativeLineItem {
     fn eq(&self, other: &CreativeLineItem) -> bool {
@@ -66,7 +145,7 @@ impl PartialEq<CreativeLineItem> for ReadCreativeLineItem {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, TypedBuilder)]
 pub struct CreateCreativeLineItem {
     /// Unique ID of the Creative to be associated. Must bethe same type as the Line Item.
     creative_id: u64,
@@ -75,16 +154,20 @@ pub struct CreateCreativeLineItem {
     /// When the Line Item has creative_weighting_method set to WEIGHTED, this field represents the
     /// desired ratio of delivery against all other associated Creatives of the same size and type.
     /// Should be an integer between 1 and 100.
+    #[builder(default)]
     weighting: Option<u64>,
     /// Start date for the Creative to serve within this Line Item, optional. If either start_date
     /// or end_date is set, both values will override the Creative level dates, otherwise Creative
     /// level will be used.
+    #[builder(default, setter(into))]
     start_date: Option<String>,
     /// End date for the Creative to serve within this Line Item, optional. If either start_date or
     /// end_date is set, both values will override the Creative level dates, otherwise Creative
     /// level will be used.
+    #[builder(default, setter(into))]
     end_date: Option<String>,
     /// Is it active?
+    #[builder(default)]
     active: bool,
 }
 
@@ -103,7 +186,7 @@ impl Create<CreativeLineItem> for CreateCreativeLineItem {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, TypedBuilder)]
 pub struct DeleteCreativeLineItem {
     cli_id: u64,
 }
