@@ -7,6 +7,7 @@ use crate::resource::{
     Create, Delete, Read, Resource,
 };
 use serde::{Deserialize, Serialize};
+use typed_builder::TypedBuilder;
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LineItem {
@@ -82,34 +83,141 @@ pub struct LineItem {
     buzz_key: String,
 }
 
+impl LineItem {
+    /// Create a builder for CreateLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::LineItem;
+    ///
+    /// let create_advertiser = LineItem::create_builder()
+    ///     .advertiser_id(1)
+    ///     .campaign_id(2)
+    ///     .line_item_type_id(3)
+    ///     .line_item_budget(1000.0)
+    ///     .build();
+    ///
+    /// let advertiser = beeswax_client.create(&create_advertiser).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn create_builder() -> CreateLineItemBuilder<(
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+    )> {
+        CreateLineItem::builder()
+    }
+
+    /// Create a builder for ReadLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::LineItem;
+    ///
+    /// let read_line_item = LineItem::read_builder()
+    ///     .advertiser_id(1)
+    ///     .build();
+    ///
+    /// let line_items = beeswax_client.read(&read_line_item).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn read_builder(
+    ) -> ReadLineItemBuilder<((), (), (), (), (), (), (), (), (), (), (), (), ())> {
+        ReadLineItem::builder()
+    }
+
+    /// Create a builder for DeleteLineItem
+    /// ```
+    /// # use std::error::Error;
+    /// # use beeswax::client::async_client::AsyncInMemoryClient;
+    /// # #[tokio::main]
+    /// # async fn main() -> Result<(), Box<dyn Error>> {
+    /// # let mut beeswax_client = AsyncInMemoryClient::new();
+    /// use beeswax::resource::LineItem;
+    ///
+    /// let delete_line_item = LineItem::delete_builder()
+    ///     .line_item_id(10)
+    ///     .build();
+    ///
+    /// beeswax_client.delete(&delete_line_item).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub fn delete_builder() -> DeleteLineItemBuilder<((),)> {
+        DeleteLineItem::builder()
+    }
+}
+
 impl Resource for LineItem {
     const NAME: &'static str = "line_item";
 }
 
-#[derive(Clone, Default, Debug, Serialize)]
+#[derive(Clone, Default, Debug, Serialize, TypedBuilder)]
 pub struct ReadLineItem {
     /// Unique ID of the Line Item
+    #[builder(default, setter(into))]
     line_item_id: Option<u64>,
     /// Must be a valid and active Campaign
+    #[builder(default, setter(into))]
     campaign_id: Option<u64>,
     /// Must belong to the same account as the Line Item and be active
+    #[builder(default, setter(into))]
     advertiser_id: Option<u64>,
     /// The type of the Line Item. 0=banner, 1=video.
+    #[builder(default, setter(into))]
     line_item_type_id: Option<u64>,
     /// Name of the Line Item, e.g. "Winter lead generation"
+    #[builder(default, setter(into))]
     line_item_name: Option<String>,
     /// ID of the Bid Modifier associated with this Line Item
+    #[builder(default, setter(into))]
     bid_modifier_id: Option<u64>,
     /// ID of the Delivery Modifier associated with this Line Item
+    #[builder(default, setter(into))]
     delivery_modifier_id: Option<u64>,
     /// Start date of the Line Item. No Line Items associated with the Campaign can have start dates prior to this date.
+    #[builder(default, setter(into))]
     start_date: Option<String>,
     /// End date of the Line Item. No Line Items associated with the Campaign can have end dates after this date.
+    #[builder(default, setter(into))]
     end_date: Option<String>,
     /// An alternative id to lookup the Line Item, if desired
+    #[builder(default, setter(into))]
     alternative_id: Option<String>,
+    #[builder(default, setter(into))]
     active: Option<bool>,
+    #[builder(default, setter(into))]
     create_date: Option<String>,
+    #[builder(default, setter(into))]
     update_date: Option<String>,
 }
 
@@ -136,7 +244,7 @@ impl PartialEq<LineItem> for ReadLineItem {
     }
 }
 
-#[derive(Clone, Default, Debug, Deserialize, Serialize)]
+#[derive(Clone, Default, Debug, Deserialize, Serialize, TypedBuilder)]
 pub struct CreateLineItem {
     /// Must be a valid and active Campaign
     pub campaign_id: u64,
@@ -145,53 +253,73 @@ pub struct CreateLineItem {
     /// The type of the Line Item. 0=banner, 1=video, 2=native
     pub line_item_type_id: u64,
     /// The ID of the associated Targeting Template, must be a valid and active Targeting Template.
+    #[builder(default, setter(into))]
     pub targeting_template_id: Option<u64>,
     /// Name of the Line Item, e.g. "Winter lead generation"
+    #[builder(default, setter(into))]
     pub line_item_name: String,
     /// Maximum amount to spend on this Line Item
     pub line_item_budget: f64,
     /// Maximum amount to spend or deliver in a day, cannot exceed campaign_budget or be so low as
     /// to prevent campaign_budget from being reached over the length of the campaign.
+    #[builder(default, setter(into))]
     pub daily_budget: Option<f64>,
     /// Type of budget, 0=spend, 1=impressions, 2=spend with vendor fees
+    #[builder(default, setter(into))]
     pub budget_type: Option<u64>,
     /// Supported revenue types: CPM, CPC, CPCV, CPI, CPA
+    #[builder(default, setter(into))]
     pub revenue_type: Option<RevenueType>,
     /// If a revenue_type is set, this is field is the basis of calculation. For example, if
     /// revenue_type is CPM and revenue_amount is 5.12, revenue will be calculated as a $5.12 CPM.
+    #[builder(default, setter(into))]
     pub revenue_amount: Option<f64>,
     /// ID of a Bid Modifier object to associate with the Line Item. If set, max_bid must also be
     /// set.
+    #[builder(default, setter(into))]
     pub bid_modifier_id: Option<u64>,
     /// ID of the Delivery Modifier to associate with this Line Item
+    #[builder(default, setter(into))]
     pub delivery_modifier_id: Option<u64>,
     /// Maximum bid after taking into consideration any Bid Modifiers.
+    #[builder(default, setter(into))]
     pub max_bid: Option<f64>,
     /// Bidding Strategy JSON.
+    #[builder(default, setter(into))]
     pub bidding: BiddingStratergy,
     /// Either RANDOM or WEIGHTED
+    #[builder(default, setter(into))]
     pub creative_weighting_method: Option<WeightingMethod>,
     /// When using Experiments the group to use for segregating users. The test_group_id must belong
     /// to the test_plan_id assigned to the Campaign. If a test_plan_id is set at the Campaign
     /// level, the test_group_id may not be null.
+    #[builder(default, setter(into))]
     pub test_group_id: Option<u64>,
     /// Start date of the Line Item.
+    #[builder(default, setter(into))]
     pub start_date: String,
     /// End date of the Line Item.
+    #[builder(default, setter(into))]
     pub end_date: Option<String>,
     /// Frequency cap JSON.
+    #[builder(default, setter(into))]
     pub frequency_cap: Option<Vec<FrequencyCap>>,
     /// The method of frequency capping. Must match Campaign-level if set. For definitions, see the
     /// Frequency Cap guide.
+    #[builder(default, setter(into))]
     pub frequency_cap_type: Option<u64>,
     /// When targeting by user_time_of_week, this field should include a list of timezones you
     /// expect the ad to serve within. If not set properly, pacing will be uneven.
+    #[builder(default, setter(into))]
     pub user_timezones: Option<Vec<String>>,
     /// An alternative id to lookup the Line Item, if desired
+    #[builder(default, setter(into))]
     pub alternative_id: Option<String>,
     /// Notes about the Line Item, up to 255 chars
+    #[builder(default, setter(into))]
     pub notes: Option<String>,
     /// Is the Line Item active? Must be set to 0 on POST since no Creatives are yet assigned.
+    #[builder(default)]
     pub active: bool,
 }
 
@@ -228,9 +356,9 @@ impl Create<LineItem> for CreateLineItem {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, TypedBuilder)]
 pub struct DeleteLineItem {
-    creative_id: u64,
+    line_item_id: u64,
 }
 
 impl Delete<LineItem> for DeleteLineItem {}

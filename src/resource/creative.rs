@@ -150,8 +150,34 @@ impl Creative {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn create_builder(
-    ) -> CreateCreativeBuilder<((), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), (), ())> {
+    pub fn create_builder() -> CreateCreativeBuilder<(
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+        (),
+    )> {
         CreateCreative::builder()
     }
 

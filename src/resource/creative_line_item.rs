@@ -53,8 +53,7 @@ impl CreativeLineItem {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn create_builder(
-    ) -> CreateCreativeLineItemBuilder<((), (), (), (), (), ())> {
+    pub fn create_builder() -> CreateCreativeLineItemBuilder<((), (), (), (), (), ())> {
         CreateCreativeLineItem::builder()
     }
 
@@ -100,7 +99,6 @@ impl CreativeLineItem {
         DeleteCreativeLineItem::builder()
     }
 }
-
 
 impl Resource for CreativeLineItem {
     const NAME: &'static str = "creative_line_item";
