@@ -14,10 +14,13 @@ categories = ["api-bindings", "asynchronous",]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+isahc = { version = "0.9.4", features = ["cookies", "json"] }
 rand = "0.7.3"
-reqwest = { version = "0.10", features = ["cookies", "json"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_repr = "0.1"
-tokio = { version = "0.2", features = ["full"] }
+serde_urlencoded = "0.6.1"
 typed-builder = "0.6.0"
+
+[dev-dependencies]
+tokio = { version = "0.2", features = ["full"] }

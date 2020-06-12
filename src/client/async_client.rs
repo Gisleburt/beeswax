@@ -1,12 +1,14 @@
-use reqwest::{Client, ClientBuilder, Response};
+use isahc::{HttpClient, ResponseExt};
+use rand::Rng;
 use serde_json;
+use serde_urlencoded::to_string as to_url;
 
 use crate::resource::{
     authenticate::Authenticate, AnyResource, Create, Delete, Read, Resource, ResponseId,
     ResponseResource,
 };
 use crate::Result;
-use rand::Rng;
+use isahc::prelude::Request;
 
 /// Creates the BeeswaxApi client. This type is instantiated from the BeeswaxApi struct.
 pub struct AsyncBeeswaxClientBuilder {
@@ -15,9 +17,10 @@ pub struct AsyncBeeswaxClientBuilder {
 
 impl AsyncBeeswaxClientBuilder {
     pub async fn auth(self, auth: Authenticate) -> Result<AsyncBeeswaxClient> {
-        let client = ClientBuilder::new().cookie_store(true).build()?;
+        let client = HttpClient::builder().cookies().build()?;
         let url = format!("{}/rest/authenticate", &self.base_url);
-        client.post(&url).json(&auth).send().await?;
+        let body = serde_json::to_vec(&auth)?;
+        client.post_async(&url, body).await?;
         Ok(AsyncBeeswaxClient {
             base_url: self.base_url,
             client,
@@ -28,7 +31,7 @@ impl AsyncBeeswaxClientBuilder {
 /// Provides an interface to the Beeswax Api
 pub struct AsyncBeeswaxClient {
     base_url: String,
-    client: Client,
+    client: HttpClient,
 }
 
 impl AsyncBeeswaxClient {
@@ -39,10 +42,9 @@ impl AsyncBeeswaxClient {
 
     /// Find resources based on a search criteria
     pub async fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>> {
-        let url = format!("{}/rest/{}", &self.base_url, R::NAME);
-        let request = self.client.get(&url).query(criteria).build()?;
-        let response = self.client.execute(request).await?;
-        let response: ResponseResource<R> = response.json().await?;
+        let url = format!("{}/rest/{}?{}", &self.base_url, R::NAME, to_url(criteria)?);
+        let mut response = self.client.get_async(&url).await?;
+        let response: ResponseResource<R> = response.json()?;
         if response.success {
             Ok(response.payload)
         } else {
@@ -53,15 +55,14 @@ impl AsyncBeeswaxClient {
     /// Create a given resource
     pub async fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
-        let request = self.client.post(&url).json(&create.clone()).build()?;
-        let response: Response = self.client.execute(request).await?;
-
+        let body = serde_json::to_vec(&create)?;
+        let mut response = self.client.post_async(&url, body.clone()).await?;
         if !response.status().is_success() {
-            dbg!(serde_json::to_string(create));
-            dbg!(response.text().await);
+            dbg!(body);
+            dbg!(response.text());
             panic!("nope");
         }
-        let response: ResponseId = response.json().await?;
+        let response: ResponseId = response.json()?;
         if response.success {
             Ok(create.clone().into_resource(response.payload.id))
         } else {
@@ -72,11 +73,11 @@ impl AsyncBeeswaxClient {
     /// Update a given resource
     pub async fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
-        let request = self.client.put(&url).json(&resource).build()?;
-        let response: Response = self.client.execute(request).await?;
+        let body = serde_json::to_vec(&resource)?;
+        let mut response = self.client.put_async(&url, body).await?;
 
         if !response.status().is_success() {
-            dbg!(response.text().await);
+            dbg!(response.text());
             panic!("nope");
         }
 
@@ -86,11 +87,14 @@ impl AsyncBeeswaxClient {
     /// Delete a given resource
     pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
-        let request = self.client.delete(&url).json(&delete).build()?;
-        let response = self.client.execute(request).await?;
+        let body = serde_json::to_vec(&delete)?;
+        let request = Request::delete(url)
+            .header("Content-Type", "application/json")
+            .body(body)?;
+        let mut response = self.client.send_async(request).await?;
 
         if !response.status().is_success() {
-            dbg!(response.text().await);
+            dbg!(response.text());
             panic!("nope");
         }
 
