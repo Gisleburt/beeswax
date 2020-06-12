@@ -1,6 +1,5 @@
 use isahc::{HttpClient, ResponseExt};
 use rand::Rng;
-use serde_json;
 use serde_urlencoded::to_string as to_url;
 
 use crate::resource::{
@@ -133,7 +132,7 @@ impl AsyncInMemoryClient {
         Ok(resource)
     }
 
-    pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
+    pub async fn delete<R: Resource, D: Delete<R>>(&self, _delete: &D) -> Result<()> {
         Ok(())
     }
 }

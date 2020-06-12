@@ -3,6 +3,7 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 pub mod account_alert;
 pub mod advertiser;
+mod any_resource;
 pub mod authenticate;
 pub mod campaign;
 pub mod common;
@@ -14,6 +15,7 @@ pub mod view_list;
 
 pub use account_alert::AccountAlert;
 pub use advertiser::Advertiser;
+pub use any_resource::{AnyResource, FromAnyResource};
 pub use authenticate::Authenticate;
 pub use campaign::Campaign;
 pub use creative::Creative;
@@ -55,49 +57,3 @@ pub struct ResponseId {
     pub success: bool,
     pub payload: Id,
 }
-
-#[derive(Clone, Debug)]
-pub enum AnyResource {
-    AccountAlert(AccountAlert),
-    Advertiser(Advertiser),
-    Authenticate(Authenticate),
-    Campaign(Campaign),
-    Creative(Creative),
-    CreativeLineItem(CreativeLineItem),
-    LineItem(LineItem),
-    View(View),
-    ViewList(ViewList),
-}
-
-pub trait FromAnyResource {
-    fn from_any_resource(r: &AnyResource) -> Option<&Self>;
-}
-
-macro_rules! any_resource {
-    ($i:ident) => {
-        impl FromAnyResource for $i {
-            fn from_any_resource(ar: &AnyResource) -> Option<&$i> {
-                match ar {
-                    AnyResource::$i(r) => Some(r),
-                    _ => None,
-                }
-            }
-        }
-
-        impl From<$i> for AnyResource {
-            fn from(r: $i) -> Self {
-                AnyResource::$i(r)
-            }
-        }
-    };
-}
-
-any_resource!(AccountAlert);
-any_resource!(Advertiser);
-any_resource!(Authenticate);
-any_resource!(Campaign);
-any_resource!(Creative);
-any_resource!(CreativeLineItem);
-any_resource!(LineItem);
-any_resource!(View);
-any_resource!(ViewList);

@@ -38,7 +38,7 @@
 //!
 //! You can then create, update, read and delete [resources](beeswax::resource).
 //!
-//! ```
+//! ```rust
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {

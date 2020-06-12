@@ -30,7 +30,7 @@ pub struct ReadView {
 impl Read<View> for ReadView {}
 
 impl PartialEq<View> for ReadView {
-    fn eq(&self, other: &View) -> bool {
+    fn eq(&self, _other: &View) -> bool {
         unreachable!("View is of unknown shape and should not get compared to ReadView")
     }
 }

@@ -32,7 +32,7 @@ pub struct ReadViewList {
 impl Read<ViewList> for ReadViewList {}
 
 impl PartialEq<ViewList> for ReadViewList {
-    fn eq(&self, other: &ViewList) -> bool {
+    fn eq(&self, _other: &ViewList) -> bool {
         unreachable!("ViewList is of unknown shape and should not get compared to ReadViewList")
     }
 }
