@@ -73,122 +73,31 @@ pub trait FromAnyResource {
     fn from_any_resource(r: &AnyResource) -> Option<&Self>;
 }
 
-impl From<Authenticate> for AnyResource {
-    fn from(r: Authenticate) -> Self {
-        AnyResource::Authenticate(r)
-    }
-}
-impl From<AccountAlert> for AnyResource {
-    fn from(r: AccountAlert) -> Self {
-        AnyResource::AccountAlert(r)
-    }
+macro_rules! any_resource {
+    ($i:ident) => {
+        impl FromAnyResource for $i {
+            fn from_any_resource(ar: &AnyResource) -> Option<&$i> {
+                match ar {
+                    AnyResource::$i(r) => Some(r),
+                    _ => None,
+                }
+            }
+        }
+
+        impl From<$i> for AnyResource {
+            fn from(r: $i) -> Self {
+                AnyResource::$i(r)
+            }
+        }
+    };
 }
 
-impl From<Campaign> for AnyResource {
-    fn from(r: Campaign) -> AnyResource {
-        AnyResource::Campaign(r)
-    }
-}
-impl From<Advertiser> for AnyResource {
-    fn from(r: Advertiser) -> AnyResource {
-        AnyResource::Advertiser(r)
-    }
-}
-impl From<Creative> for AnyResource {
-    fn from(r: Creative) -> AnyResource {
-        AnyResource::Creative(r)
-    }
-}
-impl From<CreativeLineItem> for AnyResource {
-    fn from(r: CreativeLineItem) -> AnyResource {
-        AnyResource::CreativeLineItem(r)
-    }
-}
-impl From<LineItem> for AnyResource {
-    fn from(r: LineItem) -> AnyResource {
-        AnyResource::LineItem(r)
-    }
-}
-impl From<View> for AnyResource {
-    fn from(r: View) -> AnyResource {
-        AnyResource::View(r)
-    }
-}
-impl From<ViewList> for AnyResource {
-    fn from(r: ViewList) -> AnyResource {
-        AnyResource::ViewList(r)
-    }
-}
-
-impl FromAnyResource for AccountAlert {
-    fn from_any_resource(ar: &AnyResource) -> Option<&AccountAlert> {
-        match ar {
-            AnyResource::AccountAlert(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for Advertiser {
-    fn from_any_resource(ar: &AnyResource) -> Option<&Advertiser> {
-        match ar {
-            AnyResource::Advertiser(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for Authenticate {
-    fn from_any_resource(ar: &AnyResource) -> Option<&Authenticate> {
-        match ar {
-            AnyResource::Authenticate(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for Campaign {
-    fn from_any_resource(ar: &AnyResource) -> Option<&Campaign> {
-        match ar {
-            AnyResource::Campaign(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for Creative {
-    fn from_any_resource(ar: &AnyResource) -> Option<&Creative> {
-        match ar {
-            AnyResource::Creative(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for CreativeLineItem {
-    fn from_any_resource(ar: &AnyResource) -> Option<&CreativeLineItem> {
-        match ar {
-            AnyResource::CreativeLineItem(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for LineItem {
-    fn from_any_resource(ar: &AnyResource) -> Option<&LineItem> {
-        match ar {
-            AnyResource::LineItem(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for View {
-    fn from_any_resource(ar: &AnyResource) -> Option<&View> {
-        match ar {
-            AnyResource::View(r) => Some(r),
-            _ => None,
-        }
-    }
-}
-impl FromAnyResource for ViewList {
-    fn from_any_resource(ar: &AnyResource) -> Option<&ViewList> {
-        match ar {
-            AnyResource::ViewList(r) => Some(r),
-            _ => None,
-        }
-    }
-}
+any_resource!(AccountAlert);
+any_resource!(Advertiser);
+any_resource!(Authenticate);
+any_resource!(Campaign);
+any_resource!(Creative);
+any_resource!(CreativeLineItem);
+any_resource!(LineItem);
+any_resource!(View);
+any_resource!(ViewList);
