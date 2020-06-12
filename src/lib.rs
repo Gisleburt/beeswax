@@ -38,25 +38,22 @@
 //!
 //! You can then create, update, read and delete [resources](beeswax::resource).
 //!
-//! ```no_run
+//! ```
 //! # use std::error::Error;
 //! # #[tokio::main]
 //! # async fn main() -> Result<(), Box<dyn Error>> {
-//! # use beeswax::{AsyncBeeswaxClient, resource::authenticate::Authenticate};
-//! use beeswax::resource::advertiser::{CreateAdvertiser, ReadAdvertiser};
+//! # use beeswax::client::async_client::AsyncInMemoryClient;
+//! use beeswax::resource::Advertiser;
 //! #
 //! # let user = std::env::var("BEESWAX_USER")?;
 //! # let password = std::env::var("BEESWAX_PASSWORD")?;
 //! # let url = "https://buzzkey.api.beeswax.com".to_string();
 //! #
-//! # let beeswax_api = AsyncBeeswaxClient::builder(url)
-//! #     .auth(Authenticate::simple(user, password))
-//! #     .await?;
+//! # let mut beeswax_api = AsyncInMemoryClient::new();
 //!
-//! let create_advertiser = CreateAdvertiser {
-//!   advertiser_name: "Example advertiser".to_string(),
-//!   ..Default::default()
-//! };
+//! let create_advertiser = Advertiser::create_builder()
+//!     .advertiser_name("Example advertiser")
+//!     .build();
 //!
 //! let mut created_advertiser = beeswax_api.create(&create_advertiser).await?;
 //!
@@ -64,10 +61,9 @@
 //!
 //! let updated_advertiser = beeswax_api.update(&created_advertiser).await?;
 //!
-//! let read_advertiser = ReadAdvertiser {
-//!   advertiser_id: Some(updated_advertiser.advertiser_id),
-//!   ..Default::default()
-//! };
+//! let read_advertiser = Advertiser::read_builder()
+//!     .advertiser_id(updated_advertiser.advertiser_id)
+//!     .build();
 //!
 //! let read_advertiser = beeswax_api.read(&read_advertiser).await?.pop().unwrap();
 //!

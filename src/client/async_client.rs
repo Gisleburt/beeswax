@@ -130,7 +130,7 @@ impl AsyncInMemoryClient {
     }
 
     pub async fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
-        unimplemented!()
+        Ok(resource)
     }
 
     pub async fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
