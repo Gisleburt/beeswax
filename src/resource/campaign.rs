@@ -81,7 +81,7 @@ pub struct Campaign {
     /// Is it active?
     pub active: bool,
 
-    pub campaign_spend: u64,
+    pub campaign_spend: f64,
 
     // ToDo: Unknown Type
     // pub test_plan_id: Unknown Type,

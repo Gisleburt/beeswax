@@ -1,6 +1,6 @@
 [package]
 name = "beeswax"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Daniel Mason <daniel.mason@triptease.com>"]
 edition = "2018"
 description = "An easy to use CRUD client for the Beeswax API"
