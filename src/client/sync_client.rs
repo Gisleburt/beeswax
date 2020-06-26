@@ -8,6 +8,14 @@ use crate::resource::{
 };
 use crate::Result;
 use isahc::prelude::Request;
+use std::cell::RefCell;
+
+pub trait SyncClient {
+    fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>>;
+    fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R>;
+    fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R>;
+    fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()>;
+}
 
 /// Creates the BeeswaxApi client. This type is instantiated from the BeeswaxApi struct.
 pub struct SyncBeeswaxClientBuilder {
@@ -38,9 +46,10 @@ impl SyncBeeswaxClient {
     pub fn builder(base_url: String) -> SyncBeeswaxClientBuilder {
         SyncBeeswaxClientBuilder { base_url }
     }
-
+}
+impl SyncClient for SyncBeeswaxClient {
     /// Find resources based on a search criteria
-    pub fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>> {
+    fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>> {
         let url = format!("{}/rest/{}?{}", &self.base_url, R::NAME, to_url(criteria)?);
         let mut response = self.client.get(&url)?;
         let response: ResponseResource<R> = response.json()?;
@@ -52,7 +61,7 @@ impl SyncBeeswaxClient {
     }
 
     /// Create a given resource
-    pub fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
+    fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let body = serde_json::to_vec(&create)?;
         let mut response = self.client.post(&url, body.clone())?;
@@ -70,7 +79,7 @@ impl SyncBeeswaxClient {
     }
 
     /// Update a given resource
-    pub fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
+    fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let body = serde_json::to_vec(&resource)?;
         let mut response = self.client.put(&url, body)?;
@@ -84,7 +93,7 @@ impl SyncBeeswaxClient {
     }
 
     /// Delete a given resource
-    pub fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
+    fn delete<R: Resource, D: Delete<R>>(&self, delete: &D) -> Result<()> {
         let url = format!("{}/rest/{}", &self.base_url, R::NAME);
         let body = serde_json::to_vec(&delete)?;
         let request = Request::delete(url)
@@ -102,17 +111,19 @@ impl SyncBeeswaxClient {
 }
 
 pub struct SyncInMemoryClient {
-    store: Vec<AnyResource>,
+    store: RefCell<Vec<AnyResource>>,
 }
 
 impl SyncInMemoryClient {
     pub fn new() -> SyncInMemoryClient {
-        SyncInMemoryClient { store: Vec::new() }
+        SyncInMemoryClient { store: RefCell::new(Vec::new()) }
     }
+}
 
-    pub fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>> {
+impl SyncClient for SyncInMemoryClient {
+    fn read<R: Resource, F: Read<R>>(&self, criteria: &F) -> Result<Vec<R>> {
         let vec = self
-            .store
+            .store.borrow_mut()
             .iter() // Inefficient
             .filter_map(|r| R::from_any_resource(r))
             .filter(|r| &criteria == r)
@@ -121,18 +132,18 @@ impl SyncInMemoryClient {
         Ok(vec)
     }
 
-    pub fn create<R: Resource, C: Create<R>>(&mut self, create: &C) -> Result<R> {
+    fn create<R: Resource, C: Create<R>>(&self, create: &C) -> Result<R> {
         let mut rng = rand::thread_rng();
         let resource = create.clone().into_resource(rng.gen_range(1, 100000));
-        self.store.push(resource.clone().into());
+        self.store.borrow_mut().push(resource.clone().into());
         Ok(resource)
     }
 
-    pub fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
+    fn update<'a, R: Resource>(&self, resource: &'a R) -> Result<&'a R> {
         Ok(resource)
     }
 
-    pub fn delete<R: Resource, D: Delete<R>>(&self, _delete: &D) -> Result<()> {
+    fn delete<R: Resource, D: Delete<R>>(&self, _delete: &D) -> Result<()> {
         Ok(())
     }
 }

@@ -10,8 +10,6 @@
 //!
 //! ToDo:
 //! - Add the rest of the resources
-//! - Make runtime agnostic
-//! - Add blocking version of the client
 //!
 //! Usage
 //! -----
@@ -73,6 +71,7 @@
 //! ```
 
 pub mod client;
+pub mod prelude;
 pub mod resource;
 
 pub use client::async_client::AsyncBeeswaxClient;

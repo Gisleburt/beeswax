@@ -25,20 +25,28 @@ pub use view::View;
 pub use view_list::ViewList;
 
 use crate::{AsyncBeeswaxClient, Result, SyncBeeswaxClient};
-use std::error::Error;
 use std::fmt::Debug;
+use crate::client::sync_client::SyncClient;
 
 pub trait Resource:
     Clone + Debug + Serialize + DeserializeOwned + Sync + Into<AnyResource> + FromAnyResource
 {
     const NAME: &'static str;
+
+    fn update_sync<C: SyncClient>(&self, beeswax_client: &C) -> Result<&Self> {
+        beeswax_client.update(self)
+    }
+
+    // async fn update_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<Vec<R>> {
+    //     beeswax_client.update(self)
+    // }
 }
 
 pub trait Read<R: Resource>: Clone + Serialize + Sync + PartialEq<R> {
-    // fn read_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<Vec<R>> {
-    //     beeswax_client.read(self)
-    // }
-    //
+    fn read_sync<C: SyncClient>(&self, beeswax_client: &C) -> Result<Vec<R>> {
+        beeswax_client.read(self)
+    }
+
     // async fn read_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<Vec<R>> {
     //     beeswax_client.read(self)
     // }
@@ -47,22 +55,22 @@ pub trait Read<R: Resource>: Clone + Serialize + Sync + PartialEq<R> {
 pub trait Create<R: Resource>: Clone + Serialize + Sync {
     fn into_resource(self, id: u64) -> R;
 
-    // fn create_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<R> {
-    //     beeswax_client.create(self)
-    // }
-    //
+    fn create_sync<C: SyncClient>(&self, beeswax_client: &C) -> Result<R> {
+        beeswax_client.create(self)
+    }
+
     // async fn create_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<R> {
     //     beeswax_client.create(self)
     // }
 }
 
 pub trait Delete<R: Resource>: Clone + Serialize + Sync {
-    // fn delete_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<()> {
-    //     beeswax_client.delete(self)
-    // }
-    //
+    fn delete_sync<C: SyncClient>(&self, beeswax_client: &C) -> Result<()> {
+        beeswax_client.delete(self)
+    }
+
     // async fn delete_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<()> {
-    //     beeswax_client.delete(self)
+    //     beeswax_client.delete(self).await
     // }
 }
 
