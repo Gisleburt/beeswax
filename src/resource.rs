@@ -24,6 +24,8 @@ pub use line_item::LineItem;
 pub use view::View;
 pub use view_list::ViewList;
 
+use crate::{AsyncBeeswaxClient, Result, SyncBeeswaxClient};
+use std::error::Error;
 use std::fmt::Debug;
 
 pub trait Resource:
@@ -32,13 +34,37 @@ pub trait Resource:
     const NAME: &'static str;
 }
 
-pub trait Read<R: Resource>: Clone + Serialize + Sync + PartialEq<R> {}
+pub trait Read<R: Resource>: Clone + Serialize + Sync + PartialEq<R> {
+    // fn read_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<Vec<R>> {
+    //     beeswax_client.read(self)
+    // }
+    //
+    // async fn read_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<Vec<R>> {
+    //     beeswax_client.read(self)
+    // }
+}
 
 pub trait Create<R: Resource>: Clone + Serialize + Sync {
     fn into_resource(self, id: u64) -> R;
+
+    // fn create_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<R> {
+    //     beeswax_client.create(self)
+    // }
+    //
+    // async fn create_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<R> {
+    //     beeswax_client.create(self)
+    // }
 }
 
-pub trait Delete<R: Resource>: Clone + Serialize + Sync {}
+pub trait Delete<R: Resource>: Clone + Serialize + Sync {
+    // fn delete_sync(&self, beeswax_client: &SyncBeeswaxClient) -> Result<()> {
+    //     beeswax_client.delete(self)
+    // }
+    //
+    // async fn delete_async(&self, beeswax_client: &AsyncBeeswaxClient) -> Result<()> {
+    //     beeswax_client.delete(self)
+    // }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct ResponseResource<R: Resource> {

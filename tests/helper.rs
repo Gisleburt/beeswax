@@ -1,8 +1,7 @@
-use beeswax::{resource::authenticate::Authenticate, AsyncBeeswaxClient};
+use beeswax::{resource::authenticate::Authenticate, AsyncBeeswaxClient, SyncBeeswaxClient, Result};
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
-use std::error::Error;
 
-pub async fn get_beeswax_client() -> Result<AsyncBeeswaxClient, Box<dyn Error>> {
+pub async fn get_async_beeswax_client() -> Result<AsyncBeeswaxClient> {
     let user = std::env::var("BEESWAX_USER")?;
     let password = std::env::var("BEESWAX_PASSWORD")?;
     let url = std::env::var("BEESWAX_URL")?;
@@ -10,6 +9,15 @@ pub async fn get_beeswax_client() -> Result<AsyncBeeswaxClient, Box<dyn Error>> 
     Ok(AsyncBeeswaxClient::builder(url)
         .auth(Authenticate::simple(user, password))
         .await?)
+}
+
+pub fn get_sync_beeswax_client() -> Result<SyncBeeswaxClient> {
+    let user = std::env::var("BEESWAX_USER")?;
+    let password = std::env::var("BEESWAX_PASSWORD")?;
+    let url = std::env::var("BEESWAX_URL")?;
+
+    Ok(SyncBeeswaxClient::builder(url)
+        .auth(Authenticate::simple(user, password))?)
 }
 
 pub fn random_string(prefix: &str) -> String {

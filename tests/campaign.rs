@@ -11,7 +11,7 @@ mod helper;
 
 #[tokio::test]
 async fn test_campaign() {
-    let beeswax_client = helper::get_beeswax_client().await.unwrap();
+    let beeswax_client = helper::get_async_beeswax_client().await.unwrap();
 
     let create_advertiser = CreateAdvertiser {
         advertiser_name: random_string("Advertiser name"),

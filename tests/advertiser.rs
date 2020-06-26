@@ -6,11 +6,11 @@ use beeswax::resource::{
     advertiser::{CreateAdvertiser, ReadAdvertiser},
     common::{Continent, ConversionMethod, Currency},
 };
-use helper::{get_beeswax_client, random_string};
+use helper::{get_async_beeswax_client, random_string};
 
 #[tokio::test]
 async fn test_advertiser() {
-    let beeswax_client = get_beeswax_client().await.unwrap();
+    let beeswax_client = get_async_beeswax_client().await.unwrap();
     let create_advertiser = CreateAdvertiser {
         advertiser_name: random_string("Advertiser Name"),
         attributes: None,

@@ -6,7 +6,7 @@ mod helper;
 
 #[tokio::test]
 async fn test_view() {
-    let beeswax_client = helper::get_beeswax_client().await.unwrap();
+    let beeswax_client = helper::get_async_beeswax_client().await.unwrap();
 
     let read_view = ReadView {
         view_name: ViewName::Continents,
