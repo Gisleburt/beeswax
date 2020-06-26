@@ -70,12 +70,13 @@
 //! beeswax_api.delete(&read_advertiser).await?;
 //! # Ok(())
 //! # }
-//! ```
+//! ``
 
 pub mod client;
 pub mod resource;
 
 pub use client::async_client::AsyncBeeswaxClient;
+pub use client::sync_client::SyncBeeswaxClient;
 
 use std::error::Error;
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
