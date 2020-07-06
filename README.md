@@ -10,8 +10,6 @@ This is a very early version of this crate with only a few resources so far.
 
 ToDo:
 - Add the rest of the resources
-- Make runtime agnostic
-- Add blocking version of the client
 
 Usage
 -----
@@ -33,7 +31,7 @@ let beeswax_api = AsyncBeeswaxClient::builder(url)
 
 You can then create, update, read and delete [resources](beeswax::resource).
 
-```
+```rust
 use beeswax::resource::Advertiser;
 
 let create_advertiser = Advertiser::create_builder()
